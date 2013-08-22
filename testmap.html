@@ -84,14 +84,15 @@
       xStr=someData.x;
       yStr=someData.y;
       var urlStr = 'http://'+agsServerGeocode+'/'+agsServerInstanceNameGeocode+'/rest/services/Geometry/GeometryServer/project';
-      var aPt='[{"x":'+xStr+',"y":'+yStr+'}]';
+      var aPt={geometryType:"esriGeometryPoint",geometries : [{"x":xStr,"y":yStr}]};
+      //'geometryType:"esriGeometryPoint"[{"x":'+xStr+',"y":'+yStr+'}]';
 
-      var data={geometryType:"esriGeometryPoint","geometries":aPt};
+      var data={f:"json",inSR:mySRID,outSR:4326,geometries:aPt};
 
        $.ajax({
-           url: urlStr,
-           dataType: 'jsonp',
-           data:data,
+          url: urlStr,
+          dataType: "jsonp",
+          data: data,
            crossDomain: true,
            success:function(data){zoomMap(data);},
            error:function(x,t,m){console.log('fail');}//updateResultsFail(t,'Error with transforming to WGS84!')
