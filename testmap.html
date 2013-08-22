@@ -1,0 +1,151 @@
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title>Fire Station Insurance COA</title>
+    <!-- <meta name="viewport" content="width=device-width, initial-scale=1.0">-->
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+    <!-- Le styles -->
+    <link href="css/bootstrap.css" rel="stylesheet">
+    <style type="text/css">
+      body {
+        padding-top: 5px; /* 60px to make the container go all the way to the bottom of the topbar */
+      }
+    </style>
+
+    <script type="text/javascript" src="http://cdn.leafletjs.com/leaflet-0.6.4/leaflet.js"></script>
+    <link rel="stylesheet" href="http://cdn.leafletjs.com/leaflet-0.6.4/leaflet.css" />
+    <!--[if lte IE 8]>
+     <link rel="stylesheet" href="http://cdn.leafletjs.com/leaflet-0.6.4/leaflet.ie.css" />
+    <![endif]-->    <!-- <style type="text/javascript">#map { height: 180px; }</style> -->
+    <script type="text/javascript" src="js/jquery.js"></script>
+    <script type="text/javascript" src="js/jquery-ui.min.js"></script>
+    <script type="text/javascript" src="js/jquery.ui.core.min.js"></script>
+    <script type="text/javascript" src="js/jquery.ui.widget.min.js"></script>
+    <script type="text/javascript" src="js/jquery.ui.position.min.js"></script>
+    <script type="text/javascript" src="js/jquery.ui.autocomplete.min.js"></script>
+    <script type="text/javascript" type="text/javascript" src="js/bootstrap.js"></script>
+      <link href="http://code.jquery.com/ui/1.10.3/themes/smoothness/jquery-ui.css" rel="stylesheet">
+    
+     
+
+    <style type="text/css">
+      #map { height: 400px;
+             width:  100%;
+            }
+    </style>
+
+
+
+
+  </head>
+
+
+  <body data-twttr-rendered="true" background-color="#F0F0F0">
+    <div class="container bs-docs-container">
+
+
+
+      <div class="panel panel-primary">
+          <div  class="panel text-info" id="resultsholder" >
+          <label class="text-info" for="txtSearch"></label>
+          <input type="text" class="form-control" id="txtSearch" placeholder="Search Address" >            
+            <span id="results"></span>
+            <span id="loading" class="text-info" style="visibility:hidden">
+              <img   src="img/loading.gif" />
+            </span>
+          </div>
+          <div  class="panel" id="map" ></div>
+      </div>
+
+
+
+    </div> 
+
+
+<script>
+
+      var agsServerGeocode='gis.ashevillenc.gov'; //ArcGIS  server name for geocoding
+      var agsServerInstanceNameGeocode='COA_ArcGIS_Server'; //ArcGIS  server instance for geocoding
+      var geocdingLayerName='Buncombe_Street_Address'; //geocoding service to use.
+      var mySRID=2264 //your projection id
+
+     var zoomMap = function(data){
+      xStr=data.geometries[0].x;
+      yStr=data.geometries[0].y;
+      map.setView(new L.LatLng(yStr, xStr), 15);
+      return '';
+    }
+
+   function getLatLong(someData){
+      xStr=someData.x;
+      yStr=someData.y;
+      var urlStr = 'http://'+agsServerGeocode+'/'+agsServerInstanceNameGeocode+'/rest/services/Geometry/GeometryServer/project';
+      var aPt='[{"x":'+xStr+',"y":'+yStr+'}]';
+
+      var data={geometryType:"esriGeometryPoint","geometries":aPt};
+
+       $.ajax({
+           url: urlStr,
+           dataType: 'jsonp',
+           data:data,
+           crossDomain: true,
+           success:function(data){zoomMap(data);},
+           error:function(x,t,m){console.log('fail');}//updateResultsFail(t,'Error with transforming to WGS84!')
+       });
+     }
+
+
+$('#txtSearch').autocomplete({
+    source: function (request, response) {
+            //This is for geocoding
+
+       addressStr = $('#txtSearch').val();
+       ZipStr = 28801;
+       var urlStr = 'http://'+agsServerGeocode+'/'+agsServerInstanceNameGeocode+'/rest/services/'+geocdingLayerName+'/GeocodeServer/findAddressCandidates';
+       var data={f:"json",Street:addressStr,Zone:ZipStr,outSR:4326};
+
+      $.ajax({
+        url: urlStr,
+        dataType: "jsonp",
+        data: data,
+        success: function (data) {
+          if (data.candidates) {
+            response($.map(data.candidates.slice(0, 14), function (item) {//only display first 10
+             // alert(JSON.stringify(item));
+              return { label: item.address, value: item.address, x:item.location.x,y:item.location.y } 
+            }));
+          }
+        }
+      });
+    },
+    minLength: 5,
+    select: function (event, ui) {
+      this.blur();
+      getLatLong(ui.item);
+      //zoomMap(data);
+    }
+  });
+
+</script>
+
+
+
+    <!-- Placed at the end of the document so the pages load faster -->
+    <script type="text/javascript">
+        var map = L.map('map').setView([35.593,-82.5488], 11);
+
+		L.tileLayer('http://192.168.4.90/coabw/tiles/{z}/{x}/{y}.png', {
+			  maxZoom: 19,
+        tms: true,
+			attribution: 'Map data COA',
+		}).addTo(map);
+
+    </script>
+ 
+  </body>
+</html>
+
