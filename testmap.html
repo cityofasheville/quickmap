@@ -37,13 +37,14 @@
         height: 100%;
         width:  100%;
       }
+      #resultsholder{
+      }
       .mapdiv {
         height: 80%;
         width: 100%;
       }
       .bigtest {
         height: 100%;
-        width: 100%;
       }
     </style>
 
@@ -55,34 +56,22 @@
 
   <body data-twttr-rendered="true" background-color="#F0F0F0">
     <div class="panel text-info bigtest">
-
-
-
-      <!--<div class="panel panel-primary">-->
-          <div  class="panel text-info" id="resultsholder" >
-          <label class="text-info" for="txtSearch"></label>
-          
-
-    <div class="input-group input-group-lg">
-      <input type="text" class="form-control input-lg" id="txtSearch" placeholder="Search Address" > 
-      <span class="input-group-btn">
-        <button class="btn btn-info btn-lg" type="button">Search</button>
-      </span>
-    </div>
-
-    
-            <span id="results"></span>
-            <span id="loading" class="text-info" style="visibility:hidden">
-              <img   src="img/loading.gif" />
-            </span>
-          </div>
-
-       <!--</div>-->
-
-      <div class="panel mapdiv">
-        <div id="map"></div> <!-- This one wants to be 100% height -->
+      <div  class="panel text-info" id="resultsholder" >
+        <label class="text-info" for="txtSearch"></label>
+        <div class="input-group input-group-lg">
+          <input type="text" class="form-control input-lg" id="txtSearch" placeholder="Search Address" > 
+          <span class="input-group-btn">
+            <button class="btn btn-info btn-lg" type="button">Search</button>
+          </span>
+        </div>
+        <span id="results"></span>
+        <span id="loading" class="text-info" style="visibility:hidden">
+          <img   src="img/loading.gif" />
+        </span>
       </div>
-
+      <div class="panel mapdiv">
+        <div class="panel" id="map"></div> <!-- This one wants to be 100% height -->
+      </div>
     </div> 
 
 
