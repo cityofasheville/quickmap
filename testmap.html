@@ -157,7 +157,8 @@ $('#txtSearch').autocomplete({
         var map = L.map('map').setView([35.593,-82.5488], 11);
 
 		L.tileLayer('http://192.168.4.90/coabw/tiles/{z}/{x}/{y}.png', {
-			  maxZoom: 19,
+			  maxZoom: 14,
+        minZoom: 11,
         tms: true,
 			attribution: 'Map data COA',
 		}).addTo(map);
