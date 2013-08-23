@@ -45,21 +45,30 @@
 
 
   <body data-twttr-rendered="true" background-color="#F0F0F0">
-    <div class="container bs-docs-container">
+    <div class="panel text-info">
 
 
 
-      <div class="panel panel-primary">
+      <!--<div class="panel panel-primary">-->
           <div  class="panel text-info" id="resultsholder" >
           <label class="text-info" for="txtSearch"></label>
-          <input type="text" class="form-control" id="txtSearch" placeholder="Search Address" >            
+          
+
+    <div class="input-group input-group-lg">
+      <input type="text" class="form-control input-lg" id="txtSearch" placeholder="Search Address" > 
+      <span class="input-group-btn">
+        <button class="btn btn-info btn-lg" type="button">Search</button>
+      </span>
+    </div>
+
+    
             <span id="results"></span>
             <span id="loading" class="text-info" style="visibility:hidden">
               <img   src="img/loading.gif" />
             </span>
           </div>
           <div  class="panel" id="map" ></div>
-      </div>
+       <!--</div>-->
 
 
 
