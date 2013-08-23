@@ -105,7 +105,6 @@
       yStr=someData.y;
       var urlStr = 'http://'+agsServerGeocode+'/'+agsServerInstanceNameGeocode+'/rest/services/Geometry/GeometryServer/project';
       var aPt=JSON.stringify({geometryType:"esriGeometryPoint",geometries : [{"x":xStr,"y":yStr}]});
-      //'geometryType:"esriGeometryPoint"[{"x":'+xStr+',"y":'+yStr+'}]';
 
       var data={f:"json",inSR:mySRID,outSR:4326,geometries:aPt};
 
@@ -136,7 +135,6 @@ $('#txtSearch').autocomplete({
         success: function (data) {
           if (data.candidates) {
             response($.map(data.candidates.slice(0, 14), function (item) {//only display first 10
-             // alert(JSON.stringify(item));
               return { label: item.address, value: item.address, x:item.location.x,y:item.location.y } 
             }));
           }
@@ -147,7 +145,6 @@ $('#txtSearch').autocomplete({
     select: function (event, ui) {
       this.blur();
       getLatLong(ui.item);
-      //zoomMap(data);
     }
   });
 
