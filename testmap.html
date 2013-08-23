@@ -33,9 +33,14 @@
      
 
     <style type="text/css">
-      #map { height: 400px;
-             width:  100%;
-            }
+      #map,body,html { 
+        height: 100%;
+        width:  100%;
+      }
+      .mapdiv {
+        height: 90%;
+        width: 100%;
+      }
     </style>
 
 
@@ -45,7 +50,7 @@
 
 
   <body data-twttr-rendered="true" background-color="#F0F0F0">
-    <div class="panel text-info">
+    <div class="panel text-info mapdiv">
 
 
 
@@ -67,10 +72,12 @@
               <img   src="img/loading.gif" />
             </span>
           </div>
-          <div  class="panel" id="map" ></div>
+
        <!--</div>-->
 
-
+      <div class="panel mapdiv">
+        <div id="map"></div> <!-- This one wants to be 100% height -->
+      </div>
 
     </div> 
 
