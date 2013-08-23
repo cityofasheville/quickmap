@@ -76,7 +76,7 @@
      var zoomMap = function(data){
       xStr=data.geometries[0].x;
       yStr=data.geometries[0].y;
-      map.setView(new L.LatLng(yStr, xStr), 15);
+      map.setView(new L.LatLng(yStr, xStr), 14);
       return '';
     }
 
@@ -84,7 +84,7 @@
       xStr=someData.x;
       yStr=someData.y;
       var urlStr = 'http://'+agsServerGeocode+'/'+agsServerInstanceNameGeocode+'/rest/services/Geometry/GeometryServer/project';
-      var aPt={geometryType:"esriGeometryPoint",geometries : [{"x":xStr,"y":yStr}]};
+      var aPt=JSON.stringify({geometryType:"esriGeometryPoint",geometries : [{"x":xStr,"y":yStr}]});
       //'geometryType:"esriGeometryPoint"[{"x":'+xStr+',"y":'+yStr+'}]';
 
       var data={f:"json",inSR:mySRID,outSR:4326,geometries:aPt};
