@@ -104,6 +104,8 @@
       xStr=data.geometries[0].x;
       yStr=data.geometries[0].y;
       map.setView(new L.LatLng(yStr, xStr), 16);
+      var startPt = '[{"type": "Point","coordinates":['+xStr+','+yStr+']}]';
+      drawPoints(startPt);
       return '';
     }
 
@@ -125,6 +127,28 @@
        });
      }
 
+ function drawPoints(GJfeat){
+       
+        GJfeatObject=JSON.parse(GJfeat);
+        var geojsonMarkerOptions = {
+            radius: 8,
+            fillColor: "#468847",
+            color: "#000",
+            weight: 1,
+            opacity: 1,
+            fillOpacity: 0.8
+            
+        };
+        
+        var gjPT = L.geoJson(GJfeatObject, {
+            pointToLayer: function (feature, latlng) {
+                return L.circleMarker(latlng, geojsonMarkerOptions);
+            }
+        });
+
+       gjPT.addTo(map);
+
+    }
 
 // $('#txtSearch2').typeahead({
 //     header: 'Zoom to:',
@@ -184,6 +208,8 @@ $('#txtSearch').autocomplete({
       getLatLong(ui.item);
     }
   });
+
+
 
 
 </script>
