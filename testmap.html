@@ -244,16 +244,27 @@ $('#txtSearch').autocomplete({
             attribution:mapAttr,
         });
 
+        var parcel= L.tileLayer(
+          'http://opendatacatalog.ashevillenc.gov/coatiles_bcparcel//{z}/{x}/{y}.png', 
+          {
+            maxZoom: 18,
+            minZoom: 15,
+            tms: true,
+            attribution:mapAttr,
+        });
+
         var map = L.map('map', {
           center: [35.593,-82.5488],
           zoom: 14,
-          layers: [basemap]
+          layers: [basemap,parcel]
         });
 
 
-      var baseLayers = {"basemap": basemap};
+      var baseLayers = {"Base Map": basemap};
 
-      layersControl = new L.control.layers(null,baseLayers,{collapsed: false});
+      var parcels = {"BC Parcels": parcel}
+
+      layersControl = new L.control.layers(baseLayers,parcels,{collapsed: false});
 
       layersControl.addTo(map);
    
