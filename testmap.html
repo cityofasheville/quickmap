@@ -231,15 +231,32 @@ $('#txtSearch').autocomplete({
 
     <!-- Placed at the end of the document so the pages load faster -->
     <script type="text/javascript">
-        var map = L.map('map').setView([35.593,-82.5488], 11);
 
-		L.tileLayer('http://opendatacatalog.ashevillenc.gov/coatilesbw/{z}/{x}/{y}.png', {
-			  maxZoom: 18,
-        minZoom: 11,
-        tms: true,
-			attribution: 'Map data from The City of Asheville , NC',
-		}).addTo(map);
+        var mapAttr = 'Map data from The City of Asheville , NC',
+        mapUrl = 'http://opendatacatalog.ashevillenc.gov/coatilesbw/{z}/{x}/{y}.png';
 
+        var basemap = L.tileLayer(
+          mapUrl, 
+          {
+            maxZoom: 18,
+            minZoom: 11,
+            tms: true,
+            attribution:mapAttr,
+        });
+
+        var map = L.map('map', {
+          center: [35.593,-82.5488],
+          zoom: 14,
+          layers: [basemap]
+        });
+
+
+      var baseLayers = {"basemap": basemap};
+
+      layersControl = new L.control.layers(null,baseLayers,{collapsed: false});
+
+      layersControl.addTo(map);
+   
     </script>
  
   </body>
