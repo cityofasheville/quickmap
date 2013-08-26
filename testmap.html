@@ -28,7 +28,8 @@
     <script type="text/javascript" src="js/jquery.ui.position.min.js"></script>
     <script type="text/javascript" src="js/jquery.ui.autocomplete.min.js"></script>
     <script type="text/javascript" type="text/javascript" src="js/bootstrap.js"></script>
-      <link href="http://code.jquery.com/ui/1.10.3/themes/smoothness/jquery-ui.css" rel="stylesheet">
+    <script type="text/javascript" type="text/javascript" src="js/typeahead.min.js"></script>
+      <link href="css/jquery-ui.css" rel="stylesheet">
     
      
 
@@ -64,6 +65,12 @@
             <button class="btn btn-info btn-lg" type="button">Search</button>
           </span>
         </div>
+        <!-- <div class="input-group input-group-lg">
+          <input type="text" class="form-control input-lg" id="txtSearch2" placeholder="Search Address" > 
+          <span class="input-group-btn">
+            <button class="btn btn-info btn-lg" type="button">Search</button>
+          </span>
+        </div>-->
         <span id="results"></span>
         <span id="loading" class="text-info" style="visibility:hidden">
           <img   src="img/loading.gif" />
@@ -80,11 +87,23 @@
       var agsServerInstanceNameGeocode='COA_ArcGIS_Server'; //ArcGIS  server instance for geocoding
       var geocdingLayerName='Buncombe_Street_Address'; //geocoding service to use.
       var mySRID=2264 //your projection id
+      
+      var urlstr= 'http://'+agsServerGeocode+'/'+agsServerInstanceNameGeocode+'/rest/services/'+geocdingLayerName+'/GeocodeServer/findAddressCandidates';
 
+      var queryStr = function(){
+
+        var q = urlstr;
+            if ($('#txtSearch2').val()) {
+                q += "?Street=" + encodeURIComponent($('#txtSearch2').val())+'&outFields=&f=json';
+            }
+            return q;
+      };
+      
+   
      var zoomMap = function(data){
       xStr=data.geometries[0].x;
       yStr=data.geometries[0].y;
-      map.setView(new L.LatLng(yStr, xStr), 14);
+      map.setView(new L.LatLng(yStr, xStr), 16);
       return '';
     }
 
@@ -106,6 +125,35 @@
        });
      }
 
+
+// $('#txtSearch2').typeahead({
+//     header: 'Zoom to:',
+//     template: ['<p class="ta-h1">{{label}}</p>',
+//     '<p class="ta-p">{{x}}</p>',
+//     '<p class="ta-p">{{y}}</p>'
+//     ].join(''),
+//     limit: 5,
+//     remote: {
+//         cache:false,
+//         url:  urlstr,
+//         replace:queryStr,
+//         dataType:"jsonp",
+//         filter: function (data) {
+
+//              for(i = 0; i < data.candidates.length; i++) {
+//               var responseJSON = [];
+//                responseJSON.push({ 
+//                 label:data.candidates[i].address, 
+//                 value:data.candidates[i].address, 
+//                 x:data.candidates[i].location.x,
+//                 y:data.candidates[i].location.y,
+//               });
+//                return responseJSON;
+//             }
+//         },
+//     },
+//     engine: Hogan
+// });
 
 
 $('#txtSearch').autocomplete({
@@ -146,11 +194,11 @@ $('#txtSearch').autocomplete({
     <script type="text/javascript">
         var map = L.map('map').setView([35.593,-82.5488], 11);
 
-		L.tileLayer('http://192.168.4.90/coabw/tiles/{z}/{x}/{y}.png', {
-			  maxZoom: 14,
+		L.tileLayer('http://opendatacatalog.ashevillenc.gov/coatilesbw/{z}/{x}/{y}.png', {
+			  maxZoom: 18,
         minZoom: 11,
         tms: true,
-			attribution: 'Map data COA',
+			attribution: 'Map data The City of Asheville , NC',
 		}).addTo(map);
 
     </script>
