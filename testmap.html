@@ -103,7 +103,7 @@
      var zoomMap = function(data){
       xStr=data.geometries[0].x;
       yStr=data.geometries[0].y;
-      map.setView(new L.LatLng(yStr, xStr), 16);
+      map.setView(new L.LatLng(yStr, xStr), 17);
       var startPt = '[{"type": "Point","coordinates":['+xStr+','+yStr+']}]';
       drawPoints(startPt);
       return '';
@@ -128,7 +128,7 @@
      }
 
  function drawPoints(GJfeat){
-       
+        clearMap();
         GJfeatObject=JSON.parse(GJfeat);
         var geojsonMarkerOptions = {
             radius: 8,
@@ -148,6 +148,19 @@
 
        gjPT.addTo(map);
 
+    }
+
+    function clearMap() {
+        for(i in map._layers) {
+            if(map._layers[i]._path != undefined) {
+                try {
+                    map.removeLayer(map._layers[i]);
+                }
+                catch(e) {
+                    //do nothing....
+                }
+            }
+        }
     }
 
 // $('#txtSearch2').typeahead({
@@ -224,7 +237,7 @@ $('#txtSearch').autocomplete({
 			  maxZoom: 18,
         minZoom: 11,
         tms: true,
-			attribution: 'Map data The City of Asheville , NC',
+			attribution: 'Map data from The City of Asheville , NC',
 		}).addTo(map);
 
     </script>
