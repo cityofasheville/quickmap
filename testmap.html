@@ -91,9 +91,8 @@
          if ( $('#txtSearch').val()){
 
              addressStr = $('#txtSearch').val();
-             ZipStr = 28801;
              var urlStr = 'http://'+QuickMap.agsServerGeocode+'/'+QuickMap.agsServerInstanceNameGeocode+'/rest/services/'+QuickMap.geocdingLayerName+'/GeocodeServer/findAddressCandidates';
-             var data={f:"json",Street:addressStr,Zone:ZipStr,outSR:4326};
+             var data={f:"json",Street:addressStr};
 
             $.ajax({
               url: urlStr,
@@ -113,11 +112,9 @@
       $('#txtSearch').autocomplete({
           source: function (request, response) {
                   //This is for geocoding
-
              addressStr = $('#txtSearch').val();
-             ZipStr = 28801;
              var urlStr = 'http://'+QuickMap.agsServerGeocode+'/'+QuickMap.agsServerInstanceNameGeocode+'/rest/services/'+QuickMap.geocdingLayerName+'/GeocodeServer/findAddressCandidates';
-             var data={f:"json",Street:addressStr,Zone:ZipStr,outSR:4326};
+             var data={f:"json",Street:addressStr};
 
             $.ajax({
               url: urlStr,
