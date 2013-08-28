@@ -41,9 +41,14 @@ var QuickMap = {
       opacity: 1,
       fillOpacity: 0.8
     }
+    var HouseIcon = L.icon({
+      iconUrl: 'img/houseblack.png',
+      iconSize: [40, 40],
+      iconAnchor: [0, 0],
+    });
     var gjPT = L.geoJson(GJfeatObject, {
       pointToLayer: function (feature, latlng) {
-        return L.circleMarker(latlng, geojsonMarkerOptions);
+        return L.marker(latlng,  {icon:HouseIcon});
       }
     });
     gjPT.addTo(map);
