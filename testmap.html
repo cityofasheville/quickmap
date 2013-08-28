@@ -63,7 +63,7 @@
         <div class="input-group input-group-lg">
           <input type="text" class="form-control input-lg" id="txtSearch" placeholder="Search Address" > 
           <span class="input-group-btn">
-            <button class="btn btn-info btn-lg" type="button">Search</button>
+            <button class="btn btn-info btn-lg" type="button" id="search">Search</button>
           </span>
         </div>
         <!-- <div class="input-group input-group-lg">
@@ -87,7 +87,29 @@
 
     <!-- Placed at the end of the document so the pages load faster -->
     <script type="text/javascript">
+      $('#search').click(function() {
+         if ( $('#txtSearch').val()){
 
+             addressStr = $('#txtSearch').val();
+             ZipStr = 28801;
+             var urlStr = 'http://'+QuickMap.agsServerGeocode+'/'+QuickMap.agsServerInstanceNameGeocode+'/rest/services/'+QuickMap.geocdingLayerName+'/GeocodeServer/findAddressCandidates';
+             var data={f:"json",Street:addressStr,Zone:ZipStr,outSR:4326};
+
+            $.ajax({
+              url: urlStr,
+              dataType: "jsonp",
+              data: data,
+              success: function (data) {
+                if (data.candidates) {
+                  item = data.candidates[0];
+                  QuickMap.getLatLong({ label: item.address, value: item.address, x:item.location.x,y:item.location.y } );
+                }
+              }
+            });
+
+
+         }
+      });
       $('#txtSearch').autocomplete({
           source: function (request, response) {
                   //This is for geocoding
@@ -118,7 +140,7 @@
         });
         
         var mapAttr = 'Map data from The City of Asheville , NC',
-        mapUrl = 'http://opendatacatalog.ashevillenc.gov/coatilesbw/{z}/{x}/{y}.png';
+        mapUrl = 'http://gis.ashevillenc.gov/tiles/basemapbw/{z}/{x}/{y}.png';
 
         var basemap = L.tileLayer(
           mapUrl, 
@@ -130,7 +152,16 @@
         });
 
         var parcel= L.tileLayer(
-          'http://opendatacatalog.ashevillenc.gov/coatiles_bcparcel//{z}/{x}/{y}.png', 
+          'http://gis.ashevillenc.gov/tiles/bcparcels/{z}/{x}/{y}.png', 
+          {
+            maxZoom: 18,
+            minZoom: 16,
+            tms: true,
+            attribution:mapAttr,
+        });
+
+        var zoning= L.tileLayer(
+          'http://gis.ashevillenc.gov/tiles/coazoning/{z}/{x}/{y}.png', 
           {
             maxZoom: 18,
             minZoom: 15,
@@ -141,17 +172,25 @@
         var map = L.map('map', {
           center: [35.593,-82.5488],
           zoom: 14,
-          layers: [basemap,parcel]
+          layers: [basemap,parcel,zoning]
         });
 
 
       var baseLayers = {"Base Map": basemap};
 
-      var parcels = {"BC Parcels": parcel}
+      var overlayLayers = {
+        "City of Asheville zoning": zoning,
+        "BC Parcels": parcel,
+      }
 
-      layersControl = new L.control.layers(baseLayers,parcels,{collapsed: false});
+
+      layersControl = new L.control.layers(baseLayers,overlayLayers,{collapsed: false});
 
       layersControl.addTo(map);
+
+      map.removeLayer(zoning);
+      map.removeLayer(parcel);
+      layersControl._update(); 
    
     </script>
  
