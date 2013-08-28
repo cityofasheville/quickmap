@@ -33,8 +33,8 @@ var QuickMap = {
    drawPoints:function(GJfeat){
     QuickMap.clearMap();
     GJfeatObject=JSON.parse(GJfeat);
-    var geojsonMarkerOptions = {
-      radius: 8,
+   var geojsonMarkerOptions = {
+      radius: 10,
       fillColor: "#468847",
       color: "#000",
       weight: 1,
@@ -48,7 +48,7 @@ var QuickMap = {
     });
     var gjPT = L.geoJson(GJfeatObject, {
       pointToLayer: function (feature, latlng) {
-        return L.marker(latlng,  {icon:HouseIcon});
+        return L.circleMarker(latlng, geojsonMarkerOptions);
       }
     });
     gjPT.addTo(map);
@@ -63,6 +63,6 @@ var QuickMap = {
                 //do nothing....
             }
         }
-    }
+    };
   }
 } 
