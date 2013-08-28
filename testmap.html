@@ -29,6 +29,7 @@
     <script type="text/javascript" src="js/jquery.ui.autocomplete.min.js"></script>
     <script type="text/javascript" type="text/javascript" src="js/bootstrap.js"></script>
     <script type="text/javascript" type="text/javascript" src="js/typeahead.min.js"></script>
+    <script type="text/javascript" type="text/javascript" src="js/quickmap.js"></script>
       <link href="css/jquery-ui.css" rel="stylesheet">
     
      
@@ -81,157 +82,41 @@
       </div>
   </div>
 
-<script>
-
-      var agsServerGeocode='gis.ashevillenc.gov'; //ArcGIS  server name for geocoding
-      var agsServerInstanceNameGeocode='COA_ArcGIS_Server'; //ArcGIS  server instance for geocoding
-      var geocdingLayerName='Buncombe_Street_Address'; //geocoding service to use.
-      var mySRID=2264 //your projection id
-      
-      var urlstr= 'http://'+agsServerGeocode+'/'+agsServerInstanceNameGeocode+'/rest/services/'+geocdingLayerName+'/GeocodeServer/findAddressCandidates';
-
-      var queryStr = function(){
-
-        var q = urlstr;
-            if ($('#txtSearch2').val()) {
-                q += "?Street=" + encodeURIComponent($('#txtSearch2').val())+'&outFields=&f=json';
-            }
-            return q;
-      };
-      
-   
-     var zoomMap = function(data){
-      xStr=data.geometries[0].x;
-      yStr=data.geometries[0].y;
-      map.setView(new L.LatLng(yStr, xStr), 17);
-      var startPt = '[{"type": "Point","coordinates":['+xStr+','+yStr+']}]';
-      drawPoints(startPt);
-      return '';
-    }
-
-   function getLatLong(someData){
-      xStr=someData.x;
-      yStr=someData.y;
-      var urlStr = 'http://'+agsServerGeocode+'/'+agsServerInstanceNameGeocode+'/rest/services/Geometry/GeometryServer/project';
-      var aPt=JSON.stringify({geometryType:"esriGeometryPoint",geometries : [{"x":xStr,"y":yStr}]});
-
-      var data={f:"json",inSR:mySRID,outSR:4326,geometries:aPt};
-
-       $.ajax({
-          url: urlStr,
-          dataType: "jsonp",
-          data: data,
-           crossDomain: true,
-           success:function(data){zoomMap(data);},
-           error:function(x,t,m){console.log('fail');}//updateResultsFail(t,'Error with transforming to WGS84!')
-       });
-     }
-
- function drawPoints(GJfeat){
-        clearMap();
-        GJfeatObject=JSON.parse(GJfeat);
-        var geojsonMarkerOptions = {
-            radius: 8,
-            fillColor: "#468847",
-            color: "#000",
-            weight: 1,
-            opacity: 1,
-            fillOpacity: 0.8
-            
-        };
-        
-        var gjPT = L.geoJson(GJfeatObject, {
-            pointToLayer: function (feature, latlng) {
-                return L.circleMarker(latlng, geojsonMarkerOptions);
-            }
-        });
-
-       gjPT.addTo(map);
-
-    }
-
-    function clearMap() {
-        for(i in map._layers) {
-            if(map._layers[i]._path != undefined) {
-                try {
-                    map.removeLayer(map._layers[i]);
-                }
-                catch(e) {
-                    //do nothing....
-                }
-            }
-        }
-    }
-
-// $('#txtSearch2').typeahead({
-//     header: 'Zoom to:',
-//     template: ['<p class="ta-h1">{{label}}</p>',
-//     '<p class="ta-p">{{x}}</p>',
-//     '<p class="ta-p">{{y}}</p>'
-//     ].join(''),
-//     limit: 5,
-//     remote: {
-//         cache:false,
-//         url:  urlstr,
-//         replace:queryStr,
-//         dataType:"jsonp",
-//         filter: function (data) {
-
-//              for(i = 0; i < data.candidates.length; i++) {
-//               var responseJSON = [];
-//                responseJSON.push({ 
-//                 label:data.candidates[i].address, 
-//                 value:data.candidates[i].address, 
-//                 x:data.candidates[i].location.x,
-//                 y:data.candidates[i].location.y,
-//               });
-//                return responseJSON;
-//             }
-//         },
-//     },
-//     engine: Hogan
-// });
-
-
-$('#txtSearch').autocomplete({
-    source: function (request, response) {
-            //This is for geocoding
-
-       addressStr = $('#txtSearch').val();
-       ZipStr = 28801;
-       var urlStr = 'http://'+agsServerGeocode+'/'+agsServerInstanceNameGeocode+'/rest/services/'+geocdingLayerName+'/GeocodeServer/findAddressCandidates';
-       var data={f:"json",Street:addressStr,Zone:ZipStr,outSR:4326};
-
-      $.ajax({
-        url: urlStr,
-        dataType: "jsonp",
-        data: data,
-        success: function (data) {
-          if (data.candidates) {
-            response($.map(data.candidates.slice(0, 14), function (item) {//only display first 10
-              return { label: item.address, value: item.address, x:item.location.x,y:item.location.y } 
-            }));
-          }
-        }
-      });
-    },
-    minLength: 5,
-    select: function (event, ui) {
-      this.blur();
-      getLatLong(ui.item);
-    }
-  });
-
-
-
-
-</script>
 
 
 
     <!-- Placed at the end of the document so the pages load faster -->
     <script type="text/javascript">
 
+      $('#txtSearch').autocomplete({
+          source: function (request, response) {
+                  //This is for geocoding
+
+             addressStr = $('#txtSearch').val();
+             ZipStr = 28801;
+             var urlStr = 'http://'+QuickMap.agsServerGeocode+'/'+QuickMap.agsServerInstanceNameGeocode+'/rest/services/'+QuickMap.geocdingLayerName+'/GeocodeServer/findAddressCandidates';
+             var data={f:"json",Street:addressStr,Zone:ZipStr,outSR:4326};
+
+            $.ajax({
+              url: urlStr,
+              dataType: "jsonp",
+              data: data,
+              success: function (data) {
+                if (data.candidates) {
+                  response($.map(data.candidates.slice(0, 14), function (item) {//only display first 10
+                    return { label: item.address, value: item.address, x:item.location.x,y:item.location.y } 
+                  }));
+                }
+              }
+            });
+          },
+          minLength: 5,
+          select: function (event, ui) {
+            this.blur();
+            QuickMap.getLatLong(ui.item);
+          }
+        });
+        
         var mapAttr = 'Map data from The City of Asheville , NC',
         mapUrl = 'http://opendatacatalog.ashevillenc.gov/coatilesbw/{z}/{x}/{y}.png';
 
