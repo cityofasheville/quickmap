@@ -144,7 +144,17 @@
         var mapAttr = 'Map data from The City of Asheville , NC',
         mapUrl = 'http://gis.ashevillenc.gov/tiles/basemapbw/{z}/{x}/{y}.png';
 
-        var basemap = L.tileLayer(
+        var basemapclr = L.tileLayer(
+          mapUrl, 
+          {
+            maxZoom: 19,
+            minZoom: 11,
+            tms: true,
+            opacity:.25,
+            attribution:mapAttr,
+        });
+
+        var basemapsld = L.tileLayer(
           mapUrl, 
           {
             maxZoom: 19,
@@ -171,18 +181,33 @@
             attribution:mapAttr,
         });
 
+
+        var img2010 = L.tileLayer.wms("http://services.nconemap.com/arcgis/services/Imagery/Orthoimagery_Latest/ImageServer/WMSServer?", {
+            layers: 'Orthoimagery_Latest',
+            format: 'image/png',
+            transparent: true,
+            attribution: "Imagery from - North Carolina Center for Geographic Information and Analysis"
+        })
+
         var map = L.map('map', {
           center: [35.593,-82.5488],
           zoom: 14,
-          layers: [basemap,parcel,zoning],
+          layers: [basemapsld,parcel,zoning],
           fullscreenControl: true,
           fullscreenControlOptions: {
             title:"Make the Map Full Screen"
           }
         });
 
+     
 
-      var baseLayers = {"Base Map": basemap};
+      var bmimg = L.layerGroup([img2010,basemapclr])
+
+      var baseLayers = {
+        "Street Map": basemapsld,
+        "Imagery":img2010,
+        "Street Map And Imagery":bmimg,
+      };
 
       var overlayLayers = {
         "City of Asheville zoning": zoning,
@@ -204,6 +229,7 @@
 
       map.removeLayer(zoning);
       map.removeLayer(parcel);
+      
       layersControl._update(); 
    
     </script>
