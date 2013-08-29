@@ -9,7 +9,7 @@
     <meta name="author" content="">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
     <!-- Le styles -->
-    <link href="css/bootstrap.css" rel="stylesheet">
+    <link href="css/bootstrap.min.css" rel="stylesheet">
     <style type="text/css">
       body {
         padding-top: 5px; /* 60px to make the container go all the way to the bottom of the topbar */
@@ -27,11 +27,13 @@
     <script type="text/javascript" src="js/jquery.ui.widget.min.js"></script>
     <script type="text/javascript" src="js/jquery.ui.position.min.js"></script>
     <script type="text/javascript" src="js/jquery.ui.autocomplete.min.js"></script>
-    <script type="text/javascript" type="text/javascript" src="js/bootstrap.js"></script>
-    <script type="text/javascript" type="text/javascript" src="js/typeahead.min.js"></script>
-    <script type="text/javascript" type="text/javascript" src="js/quickmap.js"></script>
-      <link href="css/jquery-ui.css" rel="stylesheet">
-    
+    <script type="text/javascript" src="js/bootstrap.js"></script>
+    <script type="text/javascript" src="js/typeahead.min.js"></script>
+    <script type="text/javascript" src="js/quickmap.js"></script>
+    <script type="text/javascript" src="js/Control.FullScreen.js"></script>
+
+    <link href="css/jquery-ui.css" rel="stylesheet">
+    <link href="css/Control.FullScreen.css" rel="stylesheet">
      
 
     <style type="text/css">
@@ -48,7 +50,14 @@
       .bigtest {
         height: 100%;
       }
+      .fl{float:right;}
       .ui-autocomplete { position: absolute; cursor: default;z-index:9999 !important;}
+
+    .leaflet-control-zoom-fullscreen { background-image: url(img/icon-fullscreen.png); }
+    /* on selector per rule as explained here : http://www.sitepoint.com/html5-full-screen-api/ */
+    #map:-webkit-full-screen { width: 100% !important; height: 100% !important; }
+    #map:-moz-full-screen { width: 100% !important; height: 100% !important; }
+    #map:full-screen { width: 100% !important; height: 100% !important; }
     </style>
 
 
@@ -58,8 +67,9 @@
 
 
   <body data-twttr-rendered="true" background-color="#F0F0F0">
+    
     <div class="panel text-info bigtest">
-      <div  class="panel text-info" id="resultsholder" >
+      <div  class="panel panel-heading text-info" id="resultsholder" >
         <label class="text-info" for="txtSearch"></label>
         <div class="input-group input-group-lg">
           <input type="text" class="form-control input-lg" id="txtSearch" placeholder="Search Address" > 
@@ -67,18 +77,9 @@
             <button class="btn btn-info btn-lg" type="button" id="search">Search</button>
           </span>
         </div>
-        <!-- <div class="input-group input-group-lg">
-          <input type="text" class="form-control input-lg" id="txtSearch2" placeholder="Search Address" > 
-          <span class="input-group-btn">
-            <button class="btn btn-info btn-lg" type="button">Search</button>
-          </span>
-        </div>-->
-        <span id="results"></span>
-        <span id="loading" class="text-info" style="visibility:hidden">
-          <img   src="img/loading.gif" />
-        </span>
+       <span id="results"></span>
       </div>
-      <div class="panel mapdiv">
+      <div class="panel panel-body mapdiv">
         <div class="panel" id="map"></div> <!-- This one wants to be 100% height -->
       </div>
   </div>
@@ -86,8 +87,11 @@
 
 
 
+
     <!-- Placed at the end of the document so the pages load faster -->
     <script type="text/javascript">
+
+
       $('#search').click(function() {
          if ( $('#txtSearch').val()){
 
@@ -143,7 +147,7 @@
         var basemap = L.tileLayer(
           mapUrl, 
           {
-            maxZoom: 18,
+            maxZoom: 19,
             minZoom: 11,
             tms: true,
             attribution:mapAttr,
@@ -152,7 +156,7 @@
         var parcel= L.tileLayer(
           'http://gis.ashevillenc.gov/tiles/bcparcels/{z}/{x}/{y}.png', 
           {
-            maxZoom: 18,
+            maxZoom: 19,
             minZoom: 16,
             tms: true,
             attribution:mapAttr,
@@ -161,7 +165,7 @@
         var zoning= L.tileLayer(
           'http://gis.ashevillenc.gov/tiles/coazoning/{z}/{x}/{y}.png', 
           {
-            maxZoom: 18,
+            maxZoom: 19,
             minZoom: 15,
             tms: true,
             attribution:mapAttr,
@@ -170,7 +174,11 @@
         var map = L.map('map', {
           center: [35.593,-82.5488],
           zoom: 14,
-          layers: [basemap,parcel,zoning]
+          layers: [basemap,parcel,zoning],
+          fullscreenControl: true,
+          fullscreenControlOptions: {
+            title:"Make the Map Full Screen"
+          }
         });
 
 
@@ -185,6 +193,14 @@
       layersControl = new L.control.layers(baseLayers,overlayLayers,{collapsed: false});
 
       layersControl.addTo(map);
+
+      map.on('enterFullscreen', function(){
+        if(window.console) window.console.log('enterFullscreen');
+      });
+      
+      map.on('exitFullscreen', function(){
+        if(window.console) window.console.log('exitFullscreen');
+      });
 
       map.removeLayer(zoning);
       map.removeLayer(parcel);
