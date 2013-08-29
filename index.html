@@ -27,10 +27,12 @@
     <script type="text/javascript" src="js/jquery.ui.widget.min.js"></script>
     <script type="text/javascript" src="js/jquery.ui.position.min.js"></script>
     <script type="text/javascript" src="js/jquery.ui.autocomplete.min.js"></script>
-    <script type="text/javascript" type="text/javascript" src="js/bootstrap.js"></script>
-    <script type="text/javascript" type="text/javascript" src="js/typeahead.min.js"></script>
-    <script type="text/javascript" type="text/javascript" src="js/quickmap.js"></script>
-      <link href="css/jquery-ui.css" rel="stylesheet">
+    <script type="text/javascript" src="js/bootstrap.js"></script>
+    <script type="text/javascript" src="js/typeahead.min.js"></script>
+    <script type="text/javascript" src="js/quickmap.js"></script>
+    <script type="text/javascript" src="js/Control.FullScreen.js"></script>
+
+    <link href="css/jquery-ui.css" rel="stylesheet">
     
      
 
@@ -49,6 +51,12 @@
         height: 100%;
       }
       .ui-autocomplete { position: absolute; cursor: default;z-index:9999 !important;}
+
+    .leaflet-control-zoom-fullscreen { background-image: url(ing/icon-fullscreen.png); }
+    /* on selector per rule as explained here : http://www.sitepoint.com/html5-full-screen-api/ */
+    #map:-webkit-full-screen { width: 100% !important; height: 100% !important; }
+    #map:-moz-full-screen { width: 100% !important; height: 100% !important; }
+    #map:full-screen { width: 100% !important; height: 100% !important; }
     </style>
 
 
@@ -88,6 +96,8 @@
 
     <!-- Placed at the end of the document so the pages load faster -->
     <script type="text/javascript">
+
+
       $('#search').click(function() {
          if ( $('#txtSearch').val()){
 
@@ -170,7 +180,11 @@
         var map = L.map('map', {
           center: [35.593,-82.5488],
           zoom: 14,
-          layers: [basemap,parcel,zoning]
+          layers: [basemap,parcel,zoning],
+          fullscreenControl: true,
+          fullscreenControlOptions: {
+            title:"Show me the fullscreen !"
+          }
         });
 
 
@@ -185,6 +199,14 @@
       layersControl = new L.control.layers(baseLayers,overlayLayers,{collapsed: false});
 
       layersControl.addTo(map);
+
+      map.on('enterFullscreen', function(){
+        if(window.console) window.console.log('enterFullscreen');
+      });
+      
+      map.on('exitFullscreen', function(){
+        if(window.console) window.console.log('exitFullscreen');
+      });
 
       map.removeLayer(zoning);
       map.removeLayer(parcel);
