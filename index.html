@@ -9,7 +9,7 @@
     <meta name="author" content="">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
     <!-- Le styles -->
-    <link href="css/bootstrap.css" rel="stylesheet">
+    <link href="css/bootstrap.min.css" rel="stylesheet">
     <style type="text/css">
       body {
         padding-top: 5px; /* 60px to make the container go all the way to the bottom of the topbar */
@@ -50,6 +50,7 @@
       .bigtest {
         height: 100%;
       }
+      .fl{float:right;}
       .ui-autocomplete { position: absolute; cursor: default;z-index:9999 !important;}
 
     .leaflet-control-zoom-fullscreen { background-image: url(img/icon-fullscreen.png); }
@@ -66,27 +67,18 @@
 
 
   <body data-twttr-rendered="true" background-color="#F0F0F0">
-    <div class="panel text-info bigtest">
+    
+    <div class="panel bigtest">
       <div  class="panel text-info" id="resultsholder" >
         <label class="text-info" for="txtSearch"></label>
         <div class="input-group input-group-lg">
           <input type="text" class="form-control input-lg" id="txtSearch" placeholder="Search Address" > 
           <span class="input-group-btn">
             <button class="btn btn-info btn-lg" type="button" id="search">Search</button>
-          </span>
+            <span id="results" style="visibility:hidden"></span>
         </div>
-        <!-- <div class="input-group input-group-lg">
-          <input type="text" class="form-control input-lg" id="txtSearch2" placeholder="Search Address" > 
-          <span class="input-group-btn">
-            <button class="btn btn-info btn-lg" type="button">Search</button>
-          </span>
-        </div>-->
-        <span id="results"></span>
-        <span id="loading" class="text-info" style="visibility:hidden">
-          <img   src="img/loading.gif" />
-        </span>
       </div>
-      <div class="panel mapdiv">
+      <div class="panel mapdiv text-info">
         <div class="panel" id="map"></div> <!-- This one wants to be 100% height -->
       </div>
   </div>
