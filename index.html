@@ -33,7 +33,7 @@
     <script type="text/javascript" src="js/Control.FullScreen.js"></script>
 
     <link href="css/jquery-ui.css" rel="stylesheet">
-    
+    <link href="css/Control.FullScreen.css" rel="stylesheet">
      
 
     <style type="text/css">
@@ -52,7 +52,7 @@
       }
       .ui-autocomplete { position: absolute; cursor: default;z-index:9999 !important;}
 
-    .leaflet-control-zoom-fullscreen { background-image: url(ing/icon-fullscreen.png); }
+    .leaflet-control-zoom-fullscreen { background-image: url(img/icon-fullscreen.png); }
     /* on selector per rule as explained here : http://www.sitepoint.com/html5-full-screen-api/ */
     #map:-webkit-full-screen { width: 100% !important; height: 100% !important; }
     #map:-moz-full-screen { width: 100% !important; height: 100% !important; }
@@ -183,7 +183,7 @@
           layers: [basemap,parcel,zoning],
           fullscreenControl: true,
           fullscreenControlOptions: {
-            title:"Show me the fullscreen !"
+            title:"Make the Map Full Screen"
           }
         });
 
