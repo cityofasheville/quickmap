@@ -1,2 +1,7 @@
-.leaflet-control-zoom-fullscreen { background-image: url(img/icon-fullscreen.png); }
-.leaflet-container:-webkit-full-screen { width: 100% !important; height: 100% !important; }
+.leaflet-control-zoom-fullscreen {
+    background-image: url(../img/icon-fullscreen.png);
+}
+.leaflet-container:-webkit-full-screen {
+    width: 100% !important;
+    height: 100% !important;
+}
