@@ -1,10 +1,8 @@
-
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="utf-8">
-    <title>City Map</title>
-    <!-- <meta name="viewport" content="width=device-width, initial-scale=1.0">-->
+<head>
+    <title>Leaflet.fullscreen</title>
+
     <meta name="description" content="">
     <meta name="author" content="">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
@@ -16,11 +14,14 @@
       }
     </style>
 
-    <script type="text/javascript" src="http://cdn.leafletjs.com/leaflet-0.6.4/leaflet.js"></script>
-    <link rel="stylesheet" href="http://cdn.leafletjs.com/leaflet-0.6.4/leaflet.css" />
+     <link rel="stylesheet" href="http://cdn.leafletjs.com/leaflet-0.6.4/leaflet.css" />
     <!--[if lte IE 8]>
-     <link rel="stylesheet" href="http://cdn.leafletjs.com/leaflet-0.6.4/leaflet.ie.css" />
-    <![endif]-->    <!-- <style type="text/javascript">#map { height: 180px; }</style> -->
+    <link rel="stylesheet" href="libs/leaflet.ie.css"/><![endif]-->
+
+    <script src="http://cdn.leafletjs.com/leaflet-0.6.4/leaflet.js"></script>
+
+    <link rel="stylesheet" href="css/leaflet.fullscreen.css"/>
+    <script src="js/Leaflet.fullscreen.js"></script>
     <script type="text/javascript" src="js/jquery.js"></script>
     <script type="text/javascript" src="js/jquery-ui.min.js"></script>
     <script type="text/javascript" src="js/jquery.ui.core.min.js"></script>
@@ -30,11 +31,9 @@
     <script type="text/javascript" src="js/bootstrap.js"></script>
     <script type="text/javascript" src="js/typeahead.min.js"></script>
     <script type="text/javascript" src="js/quickmap.js"></script>
-    <script src="js/Leaflet.fullscreen.js"></script>
-
-    <link href="css/jquery-ui.css" rel="stylesheet">
-    <link rel="stylesheet" href="css/leaflet.fullscreen.css"/>
      
+    <link href="css/jquery-ui.css" rel="stylesheet">
+    <link href="css/Control.FullScreen.css" rel="stylesheet">
 
     <style type="text/css">
       #map,body,html { 
@@ -60,14 +59,13 @@
     #map:full-screen { width: 100% !important; height: 100% !important; }
     </style>
 
+</head>
+<body>
+<h1>Leaflet.fullscreen example</h1>
 
-
-
-  </head>
 
 
   <body data-twttr-rendered="true" background-color="#F0F0F0">
-    
     <div class="panel text-info bigtest">
       <div  class="panel panel-heading text-info" id="resultsholder" >
         <label class="text-info" for="txtSearch"></label>
@@ -84,15 +82,11 @@
       </div>
   </div>
 
+  
+<script>
 
 
-
-
-    <!-- Placed at the end of the document so the pages load faster -->
-    <script type="text/javascript">
-
-
-      $('#search').click(function() {
+    $('#search').click(function() {
          if ( $('#txtSearch').val()){
 
              addressStr = $('#txtSearch').val();
@@ -114,7 +108,8 @@
 
          }
       });
-      $('#txtSearch').autocomplete({
+
+         $('#txtSearch').autocomplete({
           source: function (request, response) {
                   //This is for geocoding
              addressStr = $('#txtSearch').val();
@@ -140,7 +135,10 @@
             QuickMap.getLatLong(ui.item);
           }
         });
-        
+
+
+
+
         var mapAttr = 'Map data from The City of Asheville , NC',
         mapUrl = 'http://gis.ashevillenc.gov/tiles/basemapbw/{z}/{x}/{y}.png';
 
@@ -189,13 +187,24 @@
             attribution: "Imagery from - North Carolina Center for Geographic Information and Analysis"
         })
 
-       var map = new L.Map(
-        'map', 
-        {
-          fullscreenControl: true,
-          layers: [basemapsld,parcel,zoning]
-        }).setView([35.593,-82.5488], 14)
-   
+        // var map = L.map('map', {
+        //   center: [35.593,-82.5488],
+        //   zoom: 14,
+        //   layers: [basemapsld,parcel,zoning],
+        //   fullscreenControl: true,
+        //   fullscreenControlOptions: {
+        //     title:"Make the Map Full Screen"
+        //   }
+        // });
+
+
+         var map = new L.Map(
+          'map', 
+          {
+            fullscreenControl: true,
+            layers: [basemapsld,parcel,zoning]
+          }).setView([35.593,-82.5488], 14)
+
         map.on('fullscreenchange', function () {
             if (map.isFullscreen()) {
                 console.log('entered fullscreen');
@@ -224,11 +233,11 @@
       layersControl.addTo(map);
 
       map.on('enterFullscreen', function(){
-        if(window.console) window.console.log('enterFullscreen');
+        //if(window.console) window.console.log('enterFullscreen');
       });
       
       map.on('exitFullscreen', function(){
-        if(window.console) window.console.log('exitFullscreen');
+        //if(window.console) window.console.log('exitFullscreen');
       });
 
       map.removeLayer(zoning);
@@ -236,7 +245,7 @@
       
       layersControl._update(); 
    
-    </script>
- 
-  </body>
+    
+</script>
+</body>
 </html>
