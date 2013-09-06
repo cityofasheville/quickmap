@@ -12,6 +12,9 @@ var QuickMap = {
     QuickMap.drawPoints(startPt);
     return '';
   },
+  getLayerInfo:function(){
+
+  },
   getLatLong:function (someData){
     xStr=someData.x;
     yStr=someData.y;
