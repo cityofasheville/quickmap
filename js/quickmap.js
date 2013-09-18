@@ -12,8 +12,59 @@ var QuickMap = {
     QuickMap.drawPoints(startPt);
     return '';
   },
-  getLayerInfo:function(){
+  retLayerInfo:function(somedata,eventData){
+      if(somedata.results.length > 0) {
+            //Popup text should be in html format.  Showing the Storm Name with the type
+            popupText =  "<center><b>" + somedata.results[0].attributes.pinnum + "</b><br>" +somedata.results[0].attributes.address + "</center>";
 
+            //Add Popup to the map when the mouse was clicked at
+            var popup = L.popup()
+              .setLatLng(eventData.latlng)
+              .setContent(popupText)
+              .openOn(map);
+          }
+  },
+  getStateplane:function(eventData){
+    xStr = eventData.latlng.lng.toFixed(3);
+    yStr = eventData.latlng.lat.toFixed(3);
+
+    var urlStr = 'http://'+QuickMap.agsServerGeocode+'/'+QuickMap.agsServerInstanceNameGeocode+'/rest/services/Geometry/GeometryServer/project';
+    var aPt=JSON.stringify({geometryType:"esriGeometryPoint",geometries : [{"x":xStr,"y":yStr}]});
+
+    var data={f:"json",inSR:4326,outSR:QuickMap.mySRID,geometries:aPt};
+
+     $.ajax({
+        url: urlStr,
+        dataType: "jsonp",
+        data: data,
+         crossDomain: true,
+         success:function(data){QuickMap.getLayerInfo(data,eventData);},
+         error:function(x,t,m){console.log('fail');}//updateResultsFail(t,'Error with transforming to WGS84!')
+     });
+  },
+  getLayerInfo:function(somedata,eventData){
+    xStr=somedata.geometries[0].x;
+    yStr=somedata.geometries[0].y;
+ 
+    aPt =  JSON.stringify( {"x":xStr,"y":yStr,"spatialReference":{"wkid":QuickMap.mySRID}}) 
+    bbox = JSON.stringify(
+      {
+        "xmin":map.getBounds()._southWest.lng,"ymin":map.getBounds()._southWest.lat,"xmax":map.getBounds()._northEast.lng,"ymax":map.getBounds()._northEast.lat,"spatialReference":{"wkid":4326}
+      })
+ 
+    urlStr = 'http://'+QuickMap.agsServerGeocode+'/'+QuickMap.agsServerInstanceNameGeocode+'/rest/services/OpenDataAsheville/bc_parcels/MapServer/identify';
+    data={f:"json",sr:QuickMap.mySRID,layers:0,geometry:aPt,imageDisplay:"800,600,96",tolerance:3,mapExtent:bbox,geometryType:"esriGeometryPoint"};
+
+       $.ajax({
+        url: urlStr,
+        dataType: "jsonp",
+        data: data,
+         crossDomain: true,
+         success:function(data){QuickMap.retLayerInfo(data,eventData);},
+         error:function(x,t,m){console.log('fail');}
+     });
+
+   
   },
   getLatLong:function (someData){
     xStr=someData.x;
