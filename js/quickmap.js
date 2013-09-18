@@ -15,7 +15,7 @@ var QuickMap = {
   retLayerInfo:function(somedata,eventData){
       if(somedata.results.length > 0) {
             //Popup text should be in html format.  Showing the Storm Name with the type
-            popupText =  '<center><b>Pin:' + somedata.results[0].attributes.pinnum + '</b>' + 
+            popupText =  '<center><b>Pin: ' + somedata.results[0].attributes.pinnum + '</b>' + 
                 '<br>Address: ' +somedata.results[0].attributes.address + 
                 '<br>Tax Value: ' +somedata.results[0].attributes.taxvalue + 
                 '<br>Buiding Value: ' +somedata.results[0].attributes.buildingvalue + 
