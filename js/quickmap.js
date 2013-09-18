@@ -15,7 +15,14 @@ var QuickMap = {
   retLayerInfo:function(somedata,eventData){
       if(somedata.results.length > 0) {
             //Popup text should be in html format.  Showing the Storm Name with the type
-            popupText =  "<center><b>" + somedata.results[0].attributes.pinnum + "</b><br>" +somedata.results[0].attributes.address + "</center>";
+            popupText =  '<center><b>Pin:' + somedata.results[0].attributes.pinnum + '</b>' + 
+                '<br>Address: ' +somedata.results[0].attributes.address + 
+                '<br>Tax Value: ' +somedata.results[0].attributes.taxvalue + 
+                '<br>Buiding Value: ' +somedata.results[0].attributes.buildingvalue + 
+                '<br><a href="' + somedata.results[0].attributes.propcard +'" target="_blank" >Property Card</a>'  +
+                '<br><a href="' + somedata.results[0].attributes.platurl +'" target="_blank" >Plat</a>'  +
+                '<br><a href="' + somedata.results[0].attributes.deedurl +'" target="_blank" >Deed</a>'  +
+                '</center>';
 
             //Add Popup to the map when the mouse was clicked at
             var popup = L.popup()
