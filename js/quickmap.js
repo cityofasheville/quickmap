@@ -35,14 +35,16 @@ var QuickMap = {
                 tActive='';
                 if(i==0){tActive=' active'}else{tActive=' deactive'};
                 //popupContentText += '<div id="results'+i+'" class="record_list'+tActive+'" >' + somedata.results[i].attributes.pinnum + '</div>';
-                popupContentText += '<div id="results'+i+'" class="record_list'+tActive+'" ><b>PIN: </b>' + somedata.results[i].attributes.pinnum + '</div>';
-                popupContentText += '<div id="results'+i+'" class="record_list'+tActive+'" ><b>Owner: </b>' + somedata.results[i].attributes.owner + '</div>';                
-                popupContentText += '<div id="results'+i+'" class="record_list'+tActive+'" ><b>Address: </b>' + somedata.results[i].attributes.address + '</div>';
-                popupContentText += '<div id="results'+i+'" class="record_list'+tActive+'" ><b>Tax value: </b>' + somedata.results[i].attributes.taxvalue  + '</div>';
-                popupContentText += '<div id="results'+i+'" class="record_list'+tActive+'" ><b>Buidling value: </b>' + somedata.results[i].attributes.buildingvalue  + '</div>';
-                popupContentText += '<div id="results'+i+'" class="record_list'+tActive+'" ><a href="' + somedata.results[i].attributes.propcard  + '" target="_blank" >Property Card</a></div>';
-                popupContentText += '<div id="results'+i+'" class="record_list'+tActive+'" ><a href="' + somedata.results[i].attributes.platurl  + '" target="_blank" >Plat</a></div>';
-                popupContentText += '<div id="results'+i+'" class="record_list'+tActive+'" ><a href="' + somedata.results[i].attributes.deedurl  + '" target="_blank" >Deed</a></div>';
+                popupContentText += '<div id="results'+i+'" class="record_list'+tActive+'" >';
+                popupContentText += '<div ><b>PIN: </b>' + somedata.results[i].attributes.pinnum + '</div>';
+                popupContentText += '<div ><b>Owner: </b>' + somedata.results[i].attributes.owner + '</div>';                
+                popupContentText += '<div ><b>Address: </b>' + somedata.results[i].attributes.address + '</div>';
+                popupContentText += '<div ><b>Tax value: </b>' + somedata.results[i].attributes.taxvalue  + '</div>';
+                popupContentText += '<div ><b>Buidling value: </b>' + somedata.results[i].attributes.buildingvalue  + '</div>';
+                popupContentText += '<div ><a href="' + somedata.results[i].attributes.propcard  + '" target="_blank" >Property Card</a></div>';
+                popupContentText += '<div ><a href="' + somedata.results[i].attributes.platurl  + '" target="_blank" >Plat</a></div>';
+                popupContentText += '<div ><a href="' + somedata.results[i].attributes.deedurl  + '" target="_blank" >Deed</a></div>';
+                popupContentText += '</div>';
             };
             
 
@@ -60,7 +62,6 @@ var QuickMap = {
   },
   toggleRec:function(total,index){
       QuickMap.setCurrentRec(index)
-
        for (var i=0;i<total;i++ ) {$('#results'+i).hide();}
       $('#results'+index).show();
   },
