@@ -20,25 +20,34 @@ var QuickMap = {
   retLayerInfo:function(somedata,eventData){
       if(somedata.results.length > 0) {
             QuickMap.setTotalRecs(somedata.results.length);
-            popupContentText = ''
-            popupHeaderText = '<h4>Found '+somedata.results.length+' records!</h4>'+
-                              '<select class="form-control"  onchange="QuickMap.toggleRec('+somedata.results.length+',this.value)" >'
-            for (var i=0;i<somedata.results.length;i++ ) {
-                            popupHeaderText +=  '<option value="'+i+'"> '+somedata.results[i].attributes.pinnum + '</option>';
+            popupContentText = '';
+            popupHeaderText = '';
+            popupHeaderText = '<h4>Found '+somedata.results.length+' records!</h4>'
+            if(somedata.results.length > 1) {
+              popupHeaderText += '<select class="form-control input-sm text-info"  onchange="QuickMap.toggleRec('+somedata.results.length+',this.value)" >'
+              for (var i=0;i<somedata.results.length;i++ ) {
+                popupHeaderText +=  '<option value="'+i+'" class="input-sm text-info" >'+somedata.results[i].attributes.pinnum + '</option>';
+              }
+              popupHeaderText += '</select>';
             }
-            popupHeaderText += '</select>';
-
             
             for (var i=0;i<somedata.results.length;i++ ) {
                 tActive='';
                 if(i==0){tActive=' active'}else{tActive=' deactive'};
-                popupContentText += '<div id="results'+i+'" class="record_list'+tActive+'" >'  + somedata.results[i].attributes.pinnum + '</div>';
+                //popupContentText += '<div id="results'+i+'" class="record_list'+tActive+'" >' + somedata.results[i].attributes.pinnum + '</div>';
+                popupContentText += '<div id="results'+i+'" class="record_list'+tActive+'" ><b>PIN: </b>' + somedata.results[i].attributes.pinnum + '</div>';
+                popupContentText += '<div id="results'+i+'" class="record_list'+tActive+'" ><b>Address: </b>' + somedata.results[i].attributes.address + '</div>';
+                popupContentText += '<div id="results'+i+'" class="record_list'+tActive+'" ><b>Tax value: </b>' + somedata.results[i].attributes.taxvalue  + '</div>';
+                popupContentText += '<div id="results'+i+'" class="record_list'+tActive+'" ><b>Buidling value: </b>' + somedata.results[i].attributes.buildingvalue  + '</div>';
+                popupContentText += '<div id="results'+i+'" class="record_list'+tActive+'" ><a href="' + somedata.results[i].attributes.propcard  + '" target="_blank" >Property Card</a></div>';
+                popupContentText += '<div id="results'+i+'" class="record_list'+tActive+'" ><a href="' + somedata.results[i].attributes.platurl  + '" target="_blank" >Plat</a></div>';
+                popupContentText += '<div id="results'+i+'" class="record_list'+tActive+'" ><a href="' + somedata.results[i].attributes.deedurl  + '" target="_blank" >Deed</a></div>';
             };
             
 
             //Add Popup to the map when the mouse was clicked at
              popup = new L.Popup({
-              maxWidth: 200,
+              maxWidth: 250,
               maxHeight: 250,
               minHeight: 50,
             });
