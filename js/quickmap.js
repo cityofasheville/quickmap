@@ -65,8 +65,8 @@ var QuickMap = {
       $('#results'+index).show();
   },
   getStateplane:function(eventData){
-    xStr = eventData.latlng.lng.toFixed(3);
-    yStr = eventData.latlng.lat.toFixed(3);
+    xStr = eventData.latlng.lng.toFixed(8);
+    yStr = eventData.latlng.lat.toFixed(8);
 
     var urlStr = 'http://'+QuickMap.agsServerGeocode+'/'+QuickMap.agsServerInstanceNameGeocode+'/rest/services/Geometry/GeometryServer/project';
     var aPt=JSON.stringify({geometryType:"esriGeometryPoint",geometries : [{"x":xStr,"y":yStr}]});
