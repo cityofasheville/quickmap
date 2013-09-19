@@ -1,5 +1,6 @@
 var QuickMap = QuickMap || {};
 var QuickMap = {
+  CR:0,
   agsServerGeocode:'gis.ashevillenc.gov', //ArcGIS  server name for geocoding
   agsServerInstanceNameGeocode:'COA_ArcGIS_Server', //ArcGIS  server instance for geocoding
   geocdingLayerName:'Buncombe_Street_Address', //geocoding service to use.
@@ -15,21 +16,80 @@ var QuickMap = {
   retLayerInfo:function(somedata,eventData){
       if(somedata.results.length > 0) {
             //Popup text should be in html format.  Showing the Storm Name with the type
-            popupText =  '<center><b>Pin: ' + somedata.results[0].attributes.pinnum + '</b>' + 
-                '<br>Address: ' +somedata.results[0].attributes.address + 
-                '<br>Tax Value: ' +somedata.results[0].attributes.taxvalue + 
-                '<br>Buiding Value: ' +somedata.results[0].attributes.buildingvalue + 
-                '<br><a href="' + somedata.results[0].attributes.propcard +'" target="_blank" >Property Card</a>'  +
-                '<br><a href="' + somedata.results[0].attributes.platurl +'" target="_blank" >Plat</a>'  +
-                '<br><a href="' + somedata.results[0].attributes.deedurl +'" target="_blank" >Deed</a>'  +
-                '</center>';
+            //popupText =  '<dl><h2>Pin: ' + somedata.results[0].attributes.pinnum + '</h2>' + 
+            //    '<dt>Address: </dt><dd>' +somedata.results[0].attributes.address + '</dd>' +
+            //    '<dt>Tax Value: </dt><dd>' +somedata.results[0].attributes.taxvalue + '</dd>' +
+            //    '<dt>Buiding Value: </dt><dd>' +somedata.results[0].attributes.buildingvalue + '</dd>' +
+            //    '<dd><a href="' + somedata.results[0].attributes.propcard +'" target="_blank" >Property Card</a>'  + '</dd>' +
+            //    '<dd><a href="' + somedata.results[0].attributes.platurl +'" target="_blank" >Plat</a>'  + '</dd>' + 
+            //    '<dd><a href="' + somedata.results[0].attributes.deedurl +'" target="_blank" >Deed</a>'  + '</dd>' +
+            //   '</dl>';
+            popupContentText = ''
+            popupHeaderText = '<h3>Found '+somedata.results.length+' records!</h3><select class="form-control">'
+            for (var i=0;i<somedata.results.length;i++ ) {
+                            popupHeaderText +=  '<option onchange="QuickMap.toggleRec('+i+')" > '+somedata.results[i].attributes.pinnum + '</option>';
+            }
+            popupContentText += '</select>';
+
+
+            // '<ul class="pagination">' +
+            //               '<li><a href="#" onclick=>&laquo;</a></li>' +
+            //               '<li class="active" s><a href="#" >1</a></li>' +
+            //               '<li><a href="#">2</a></li>' +
+            //               '<li><a href="#">3</a></li>' +
+            //               '<li><a href="#">4</a></li>' +
+            //               '<li><a href="#">5</a></li>' +
+            //               '<li><a href="#">&raquo;</a></li>' +
+            //             '</ul>'; 
+            
+            for (var i=0;i<somedata.results.length;i++ ) {
+                tActive='';
+                QuickMap.currerec(0);
+                if(i==QuickMap.currerec){tActive=' active'}else{tActive=' deactive'};
+                popupContentText += '<div id="results'+i+'" class="recod_list'+tActive+'" >'  + somedata.results[i].attributes.pinnum + '</div>';
+            };
+            
+                        //   '<table class="table">' +
+                        //      '<thead>' +
+                        //         '<tr>' +
+                        //           '<th>PIN</th>' +
+                        //           '<th>Address</th>' +
+                        //           '<th>Tax Value</th>' +
+                        //           '<th>Property Card</th>' +
+                        //           '<th>Plat</th>' +
+                        //           '<th>Deed</th>' +
+                        //         '</tr>' +
+                        //      '</thead>' +
+                        //     '<tbody>' +
+                        //       '<tr>' +
+                        //         '<td>' + somedata.results[0].attributes.pinnum + '</td>' +
+                        //         '<td>' + somedata.results[0].attributes.address + '</td>' +
+                        //         '<td>' + somedata.results[0].attributes.taxvalue + '</td>' +
+                        //         '<td>' + somedata.results[0].attributes.buildingvalue + '</td>' +
+                        //         '<td>' + somedata.results[0].attributes.propcard +'</td>' +
+                        //         '<td>' + somedata.results[0].attributes.deedurl +'</td>' +
+                        //       '</tr>' +
+                        //     '</tbody>' +
+                        //    '</table>' +
+                        // '</ul>';
 
             //Add Popup to the map when the mouse was clicked at
-            var popup = L.popup()
-              .setLatLng(eventData.latlng)
-              .setContent(popupText)
-              .openOn(map);
-          }
+             popup = new L.Popup({
+              maxWidth: 200,
+              maxHeight: 250,
+              minHeight: 50,
+            });
+
+            popup.setLatLng(eventData.latlng);
+            popup.setContent(popupHeaderText+popupContentText);
+            map.openPopup(popup);
+        }
+  },
+  toggleRec:function(index){
+      alert(index);
+  },
+  currerec:function(index){
+    QuickMap.CR=index;
   },
   getStateplane:function(eventData){
     xStr = eventData.latlng.lng.toFixed(3);
