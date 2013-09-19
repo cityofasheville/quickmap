@@ -6,6 +6,8 @@ var QuickMap = {
   geocdingLayerName:'Buncombe_Street_Address', //geocoding service to use.
   mySRID:2264, //your projection id
   currentRec:0,
+  totalRecs:0,
+  setTotalRecs:function(val){QuickMap.totalRecs=val;},
   setCurrentRec:function(val){QuickMap.currentRec=val;},
   zoomMap :function(data){
     xStr=data.geometries[0].x;
@@ -17,12 +19,12 @@ var QuickMap = {
   },
   retLayerInfo:function(somedata,eventData){
       if(somedata.results.length > 0) {
-
+            QuickMap.setTotalRecs(somedata.results.length);
             popupContentText = ''
             popupHeaderText = '<h4>Found '+somedata.results.length+' records!</h4>'+
                               '<select class="form-control"  onchange="QuickMap.toggleRec('+somedata.results.length+',this.value)" >'
             for (var i=0;i<somedata.results.length;i++ ) {
-                            popupHeaderText +=  '<option value="record_list'+i+'"> '+somedata.results[i].attributes.pinnum + '</option>';
+                            popupHeaderText +=  '<option value="'+i+'"> '+somedata.results[i].attributes.pinnum + '</option>';
             }
             popupHeaderText += '</select>';
 
@@ -48,7 +50,9 @@ var QuickMap = {
   },
   toggleRec:function(total,index){
       QuickMap.setCurrentRec(index)
-      alert(QuickMap.currentRec);
+
+       for (var i=0;i<total;i++ ) {$('#results'+i).hide();}
+      $('#results'+index).show();
   },
   getStateplane:function(eventData){
     xStr = eventData.latlng.lng.toFixed(3);
