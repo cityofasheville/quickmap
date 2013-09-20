@@ -18,10 +18,31 @@ var QuickMap = {
     "layers":[{
       "layerindex":0,
       fields:[{
+          "id":0,
+          "name":"pinnum",
+          "style":"key", 
+          "label":"PIN"
+        },
+        {
+          "id":1,
+          "name":"owner",
+          "style":"text", 
+          "label":"Owner"
+        }],
+      },
+      {
+      "layerindex":1,
+      fields:[{
         "id":0,
-        "name":"pinnum",
+        "name":"districts",
         "style":"key", //key,text,url,num
-        "label":"PIN"
+        "label":"District"
+      },
+      {
+        "id":1,
+        "name":"Acreage",
+        "style":"text", //key,text,url,num
+        "label":"Acreage"
       }],
     }],
   },
@@ -42,7 +63,10 @@ var QuickMap = {
       popupHeaderText = '';
       //loop layers
       for(var layerIdx=0;layerIdx<QuickMap.identifyConfig.layers.length;layerIdx++){
-        popupHeaderText += QuickMap.identifyConfig.layers[layerIdx].layerindex +'<br/>'
+        for (var displayIDX=0;displayIDX<QuickMap.identifyConfig.layers[layerIdx].fields.length;displayIDX++ ){
+          popupHeaderText += QuickMap.identifyConfig.layers[layerIdx].layerindex
+          popupHeaderText += QuickMap.identifyConfig.layers[layerIdx].fields[displayIDX].name +'<br/>'
+        }
       };
       //if records exist
       if(somedata.results.length > 0) {
@@ -168,7 +192,7 @@ var QuickMap = {
   getLayerInfo:function(somedata,eventData){
     xStr=somedata.geometries[0].x;
     yStr=somedata.geometries[0].y;
-    lyrs=QuickMap.getIdentifyLayerList();
+    lyrs='all:'+QuickMap.getIdentifyLayerList();
 
     aPt =  JSON.stringify( {"x":xStr,"y":yStr,"spatialReference":{"wkid":QuickMap.mySRID}}) 
     bbox = JSON.stringify(
