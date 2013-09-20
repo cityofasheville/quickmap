@@ -20,14 +20,9 @@ var QuickMap = {
         "name":"pinnum",
         "style":"key", //key,text,url,num
         "label":"PIN"
-      },
-      {
-        "id":1,
-        "name":"propcard",
-        "style":"url", //key,text,url,num
-        "label":"Property Card"
-    }],
+      }],
   },
+  setIdentifyLayers:function(val){QuickMap.identifyLayers=val},
   setTotalRecs:function(val){QuickMap.totalRecs=val;},
   setCurrentRec:function(val){QuickMap.currentRec=val;},
   zoomMap :function(data){
@@ -59,12 +54,11 @@ var QuickMap = {
               }                
 
 
-            for (var dataIdx=0;dataIdx<somedata.results.length;dataIdx++ ){
- 
+            for (var dataIdx=0;dataIdx<QuickMap.totalRecs;dataIdx++ ) {
+              tActive='';
+              if(dataIdx==0){tActive=' active'}else{tActive=' deactive'};
+              popupContentText += '<div id="results'+dataIdx+'" class="record_list'+tActive+'" >';  
               for (var displayIDX=0;displayIDX<QuickMap.identifyLayers.fields.length;displayIDX++ ){
-                tActive='';
-                if(dataIdx==0){tActive=' active'}else{tActive=' deactive'};
-                popupContentText += '<div id="results'+dataIdx+'" class="record_list'+tActive+'" >';
                 switch(QuickMap.identifyLayers.fields[displayIDX].style){
                   case "key":
                     popupContentText += '<div><b>'+QuickMap.identifyLayers.fields[displayIDX].label+': </b>' + 
@@ -78,70 +72,24 @@ var QuickMap = {
                     popupContentText += '<div ><a href="' + somedata.results[dataIdx].attributes[QuickMap.identifyLayers.fields[displayIDX].name]  + '" target="_blank" >' +
                                         QuickMap.identifyLayers.fields[displayIDX].label+'</a></div>';
                     break;
-                  case "name":
+                  case "number":
                     popupContentText += '<div ><b>'+QuickMap.identifyLayers.fields[displayIDX].label+': </b>' + 
                                         somedata.results[dataIdx].attributes[QuickMap.identifyLayers.fields[displayIDX].name] + '</div>';
                     break;
-                  default: 
+                  case "currency":
                     popupContentText += '<div ><b>'+QuickMap.identifyLayers.fields[displayIDX].label+': </b>' + 
+                                        '$'+parseInt(somedata.results[dataIdx].attributes[QuickMap.identifyLayers.fields[displayIDX].name]).toFixed(2) + '</div>';
+                    break;
+                  default: 
+                     popupContentText += '<div><b>'+QuickMap.identifyLayers.fields[displayIDX].label+': </b>' + 
                                         somedata.results[dataIdx].attributes[QuickMap.identifyLayers.fields[displayIDX].name] + '</div>';
-
-
-
-                };
-                
-                popupContentText += '</div>';
-
+                    break;
+               };                
               }
-
-              //popupContentText += QuickMap.identifyLayers.fields[i].field.name;
-              //popupContentText += QuickMap.identifyLayers.fields[i].field.style;  //["name"] + '-' + QuickMap.identifyLayers.fields[i].name.field.style
+              popupContentText += '</div>';
             };
 
-
-
-
-            // if(somedata.results.length > 1) {
-            //   popupHeaderText += '<select class="form-control input-sm text-info"  onchange="QuickMap.toggleRec('+somedata.results.length+',this.value)" >'
-            //   for (var i=0;i<somedata.results.length;i++ ) {
-            //     popupHeaderText +=  '<option value="'+i+'" class="input-sm text-info" >'+somedata.results[i].attributes.pinnum + '</option>';
-            //   }
-            //   popupHeaderText += '</select>';
-            // }
-            
-            // for (var i=0;i<somedata.results.length;i++ ) {
-            //     tActive='';
-            //     if(i==0){tActive=' active'}else{tActive=' deactive'};
-            //     //popupContentText += '<div id="results'+i+'" class="record_list'+tActive+'" >' + somedata.results[i].attributes.pinnum + '</div>';
-            //     popupContentText += '<div id="results'+i+'" class="record_list'+tActive+'" >';
-            //     popupContentText += '<div ><b>PIN: </b>' + somedata.results[i].attributes.pinnum + '</div>';
-            //     popupContentText += '<div ><b>Owner: </b>' + somedata.results[i].attributes.owner + '</div>';                
-            //     //popupContentText += '<div ><b>Address: </b>' + somedata.results[i].attributes.address + '</div>';
-            //     addressmaker = ' ';
-            //     addressmaker += somedata.results[i].attributes.housenumber.isNull(' ') + ' ';
-            //     addressmaker = addressmaker.replace('  ',' ')
-            //     addressmaker += somedata.results[i].attributes.numbersuffix.isNull(' ') + ' ';
-            //     addressmaker = addressmaker.replace('  ',' ')
-            //     addressmaker += somedata.results[i].attributes.direction.isNull(' ') + ' ';
-            //     addressmaker = addressmaker.replace('  ',' ')
-            //     addressmaker += somedata.results[i].attributes.streetname.isNull(' ') + ' ';
-            //     addressmaker = addressmaker.replace('  ',' ')
-            //     addressmaker += somedata.results[i].attributes.streettype.isNull(' ') + ' ';
-            //     addressmaker = addressmaker.replace('  ',' ')
-
-            //     popupContentText += '<div ><b>Address: </b>' + 
-            //                           addressmaker +
-            //                         '</div>';
-                    
-            //     popupContentText += '<div ><b>Acreage: </b>' + somedata.results[i].attributes.acreage + '</div>';
-            //     popupContentText += '<div ><b>Tax value: </b>' + somedata.results[i].attributes.taxvalue  + '</div>';
-            //     popupContentText += '<div ><b>Buidling value: </b>' + somedata.results[i].attributes.buildingvalue  + '</div>';
-            //     popupContentText += '<div ><a href="' + somedata.results[i].attributes.propcard  + '" target="_blank" >Property Card</a></div>';
-            //     popupContentText += '<div ><a href="' + somedata.results[i].attributes.platurl  + '" target="_blank" >Plat</a></div>';
-            //     popupContentText += '<div ><a href="' + somedata.results[i].attributes.deedurl  + '" target="_blank" >Deed</a></div>';
-            //     popupContentText += '</div>';
-            //};
-            
+           
 
             //Add Popup to the map when the mouse was clicked at
              popup = new L.Popup({
@@ -189,7 +137,7 @@ var QuickMap = {
       })
  
     urlStr = 'http://'+QuickMap.agsServerGeocode+'/'+QuickMap.agsServerInstanceNameGeocode+'/rest/services/OpenDataAsheville/bc_parcels/MapServer/identify';
-    data={f:"json",sr:QuickMap.mySRID,layers:0,geometry:aPt,imageDisplay:"800,600,96",tolerance:3,mapExtent:bbox,geometryType:"esriGeometryPoint"};
+    data={f:"json",sr:QuickMap.mySRID,layers:0,geometry:aPt,imageDisplay:"800,600,96",tolerance:3,mapExtent:bbox,geometryType:"esriGeometryPoint",returnGeometry:false};
 
        $.ajax({
         url: urlStr,

@@ -250,24 +250,64 @@
         closeOnClick:true,
       });
 
+    
+    
+      var id = {
+      "layerIndex":0,
+      fields:[{
+          "id":0,
+          "name":"pinnum",
+          "style":"key", 
+          "label":"PIN"
+        },
+        {
+          "id":1,
+          "name":"owner",
+          "style":"text", 
+          "label":"Owner"
+        },
+        {
+          "id":2,
+          "name":"acreage",
+          "style":"text", 
+          "label":"Acreage"
+        },
+        {
+          "id":3,
+          "name":"taxvalue",
+          "style":"currency", 
+          "label":"Tax Value"
+        },        
+        {
+          "id":4,
+          "name":"buildingvalue",
+          "style":"currency", 
+          "label":"Building Value"
+        },        
+        {
+          "id":5,
+          "name":"propcard",
+          "style":"url", 
+          "label":"Property Card"
+        },
+        {
+          "id":6,
+          "name":"platurl",
+          "style":"url", 
+          "label":"Plat"
+        },
+        {
+          "id":7,
+          "name":"deedurl",
+          "style":"url", 
+          "label":"Deed"
+      }],
+    };
 
-
+    QuickMap.setIdentifyLayers(id);
 
     function onMapClick(e) {
-      // var latlngStr = '(' + e.latlng.lat.toFixed(3) + ', ' + e.latlng.lng.toFixed(3) + ')';
-      // var BBOX = map.getBounds()._southWest.lng+","+map.getBounds()._southWest.lat+","+map.getBounds()._northEast.lng+","+map.getBounds()._northEast.lat;
-      // var WIDTH = map.getSize().x;
-      // var HEIGHT = map.getSize().y;
-      // var X = map.layerPointToContainerPoint(e.layerPoint).x;
-      // var Y = map.layerPointToContainerPoint(e.layerPoint).y;
-      // var bbox = (X-1);//+","+(Y-10)+","+X+10+","+Y+10
-      // var URL = 'http://opendataserver.ashevillenc.gov/geoserver/wms?SERVICE=WMS&VERSION=1.1.1&REQUEST=GetFeatureInfo&LAYERS=coagis:bc_property&QUERY_LAYERS=coagis:bc_property&STYLES=&BBOX='+BBOX+'&FEATURE_COUNT=5&HEIGHT='+HEIGHT+'&WIDTH='+WIDTH+'&FORMAT=image%2Fpng&INFO_FORMAT=text%2Fhtml&SRS=EPSG%3A4326&X='+X+'&Y='+Y+'&='+latlngStr;
-      // //alert(URL);
       QuickMap.getStateplane(e);
-      //popup.setLatLng(e.latlng);
-      //popup.setContent(d);
-      //map.openPopup(popup);
-
     }
     function DoTheCheck() {
       if (document.checkform.getfeatureinfo.checked == true)
