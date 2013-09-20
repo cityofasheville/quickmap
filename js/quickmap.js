@@ -62,12 +62,12 @@ var QuickMap = {
       popupContentText = '';
       popupHeaderText = '';
       //loop layers
-      for(var layerIdx=0;layerIdx<QuickMap.identifyConfig.layers.length;layerIdx++){
-        for (var displayIDX=0;displayIDX<QuickMap.identifyConfig.layers[layerIdx].fields.length;displayIDX++ ){
-          popupHeaderText += QuickMap.identifyConfig.layers[layerIdx].layerindex
-          popupHeaderText += QuickMap.identifyConfig.layers[layerIdx].fields[displayIDX].name +'<br/>'
-        }
-      };
+      //for(var layerIdx=0;layerIdx<QuickMap.identifyConfig.layers.length;layerIdx++){
+      //  for (var displayIDX=0;displayIDX<QuickMap.identifyConfig.layers[layerIdx].fields.length;displayIDX++ ){
+      //    popupHeaderText += QuickMap.identifyConfig.layers[layerIdx].layerindex
+      //    popupHeaderText += QuickMap.identifyConfig.layers[layerIdx].fields[displayIDX].name +'<br/>'
+      //  }
+      //};
       //if records exist
       if(somedata.results.length > 0) {
         //make sure layer indexes match and we are on the correct layer.
