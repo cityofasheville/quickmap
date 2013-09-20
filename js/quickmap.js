@@ -92,6 +92,7 @@ var QuickMap = {
             popupHeaderText += '</select><br />';
           }                
 
+
            //setup header pulldown if there is a key set.  loop records
           for (var dataIdx=0;dataIdx<QuickMap.totalRecs;dataIdx++ ) {
             tActive='';
@@ -102,38 +103,39 @@ var QuickMap = {
             //index
             popupContentText += '<div>'+(dataIdx+1)+' of '+QuickMap.totalRecs+'</div>';        
             //loop all the fields  
-            for (var displayIDX=0;displayIDX<QuickMap.identifyConfig.layers[0].fields.length;displayIDX++ ){
+            for(var layerIdx=0;layerIdx<QuickMap.identifyConfig.layers.length;layerIdx++){
+            for (var displayIDX=0;displayIDX<QuickMap.identifyConfig.layers[layerIdx].fields.length;displayIDX++ ){
               //format fields from confuiguration
               
-              switch(QuickMap.identifyConfig.layers[0].fields[displayIDX].style){
+              switch(QuickMap.identifyConfig.layers[layerIdx].fields[displayIDX].style){
                 case "key":
-                  popupContentText += '<div><b>'+QuickMap.identifyConfig.layers[0].fields[displayIDX].label+': </b>' + 
-                                      somedata.results[dataIdx].attributes[QuickMap.identifyConfig.layers[0].fields[displayIDX].name] + '</div>';
+                  popupContentText += '<div><b>'+QuickMap.identifyConfig.layers[layerIdx].fields[displayIDX].label+': </b>' + 
+                                      somedata.results[dataIdx].attributes[QuickMap.identifyConfig.layers[layerIdx].fields[displayIDX].name] + '</div>';
                   break;
                 case "text":
-                  popupContentText += '<div><b>'+QuickMap.identifyConfig.layers[0].fields[displayIDX].label+': </b>' + 
-                                      somedata.results[dataIdx].attributes[QuickMap.identifyConfig.layers[0].fields[displayIDX].name] + '</div>';
+                  popupContentText += '<div><b>'+QuickMap.identifyConfig.layers[layerIdx].fields[displayIDX].label+': </b>' + 
+                                      somedata.results[dataIdx].attributes[QuickMap.identifyConfig.layers[layerIdx].fields[displayIDX].name] + '</div>';
                   break;
                 case "url":
-                  popupContentText += '<div ><a href="' + somedata.results[dataIdx].attributes[QuickMap.identifyConfig.layers[0].fields[displayIDX].name]  + '" target="_blank" >' +
-                                      QuickMap.identifyConfig.layers[0].fields[displayIDX].label+'</a></div>';
+                  popupContentText += '<div ><a href="' + somedata.results[dataIdx].attributes[QuickMap.identifyConfig.layers[layerIdx].fields[displayIDX].name]  + '" target="_blank" >' +
+                                      QuickMap.identifyConfig.layers[layerIdx].fields[displayIDX].label+'</a></div>';
                   break;
                 case "number":
-                  popupContentText += '<div ><b>'+QuickMap.identifyConfig.layers[0].fields[displayIDX].label+': </b>' + 
-                                      somedata.results[dataIdx].attributes[QuickMap.identifyConfig.layers[0].fields[displayIDX].name] + '</div>';
+                  popupContentText += '<div ><b>'+QuickMap.identifyConfig.layers[layerIdx].fields[displayIDX].label+': </b>' + 
+                                      somedata.results[dataIdx].attributes[QuickMap.identifyConfig.layers[layerIdx].fields[displayIDX].name] + '</div>';
                   break;
                 case "currency":
-                  popupContentText += '<div ><b>'+QuickMap.identifyConfig.layers[0].fields[displayIDX].label+': </b>' + 
+                  popupContentText += '<div ><b>'+QuickMap.identifyConfig.layers[layerIdx].fields[displayIDX].label+': </b>' + 
                                       '$'+parseInt(somedata.results[dataIdx].attributes[QuickMap.identifyConfig.layers[0].fields[displayIDX].name]).toFixed(2) + '</div>';
                   break;
                 default: 
-                   popupContentText += '<div><b>'+QuickMap.identifyConfig.layers[0].fields[displayIDX].label+': </b>' + 
-                                      somedata.results[dataIdx].attributes[QuickMap.identifyConfig.layers[0].fields[displayIDX].name] + '</div>';
+                   popupContentText += '<div><b>'+QuickMap.identifyConfig.layers[layerIdx].fields[displayIDX].label+': </b>' + 
+                                      somedata.results[dataIdx].attributes[QuickMap.identifyConfig.layers[layerIdx].fields[displayIDX].name] + '</div>';
                   break;
              };//format fields             
             }//loop fields
+            }//loop layers
             popupContentText += '</div>';
-         // };//layer indexes
         };//loop records
       }else{
         popupHeaderText = '<h4>Nothing found!</h4>'
