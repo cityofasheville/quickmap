@@ -16,10 +16,16 @@ var QuickMap = {
   identifyLayers:{
     "layerIndex":0,
     fields:[{
-      "field":{
+        "id":0,
         "name":"pinnum",
         "style":"key", //key,text,url,num
+        "label":"PIN"
       },
+      {
+        "id":1,
+        "name":"propcard",
+        "style":"url", //key,text,url,num
+        "label":"Property Card"
     }],
   },
   setTotalRecs:function(val){QuickMap.totalRecs=val;},
@@ -39,12 +45,13 @@ var QuickMap = {
             popupHeaderText = '';
             popupHeaderText = '<h4>Found '+QuickMap.totalRecs+' records!</h4>'
 
+             
              if(QuickMap.totalRecs > 1) {
                 popupHeaderText += '<select class="form-control input-sm text-info"  onchange="QuickMap.toggleRec('+QuickMap.totalRecs+',this.value)" >'
                 for (var dataIdx=0;dataIdx<QuickMap.totalRecs;dataIdx++ ) {
                   for (var displayIDX=0;displayIDX<QuickMap.identifyLayers.fields.length;displayIDX++ ){
-                    if(somedata.results[dataIdx].attributes[QuickMap.identifyLayers.fields[displayIDX].field.style] = 'key'){
-                      popupHeaderText +=  '<option value="'+dataIdx+'" class="input-sm text-info" >'+somedata.results[dataIdx].attributes[QuickMap.identifyLayers.fields[displayIDX].field.name]  + '</option>';
+                    if(QuickMap.identifyLayers.fields[displayIDX].style == 'key'){
+                      popupHeaderText +=  '<option value="'+dataIdx+'" class="input-sm text-info" >'+somedata.results[dataIdx].attributes[QuickMap.identifyLayers.fields[displayIDX].name]  + '</option>';
                     }
                   }
                 }
@@ -58,7 +65,31 @@ var QuickMap = {
                 tActive='';
                 if(dataIdx==0){tActive=' active'}else{tActive=' deactive'};
                 popupContentText += '<div id="results'+dataIdx+'" class="record_list'+tActive+'" >';
-                popupContentText += '<div ><b>PIN: </b>' + somedata.results[dataIdx].attributes[QuickMap.identifyLayers.fields[displayIDX].field.name] + '</div>';
+                switch(QuickMap.identifyLayers.fields[displayIDX].style){
+                  case "key":
+                    popupContentText += '<div><b>'+QuickMap.identifyLayers.fields[displayIDX].label+': </b>' + 
+                                        somedata.results[dataIdx].attributes[QuickMap.identifyLayers.fields[displayIDX].name] + '</div>';
+                    break;
+                  case "text":
+                    popupContentText += '<div><b>'+QuickMap.identifyLayers.fields[displayIDX].label+': </b>' + 
+                                        somedata.results[dataIdx].attributes[QuickMap.identifyLayers.fields[displayIDX].name] + '</div>';
+                    break;
+                  case "url":
+                    popupContentText += '<div ><a href="' + somedata.results[dataIdx].attributes[QuickMap.identifyLayers.fields[displayIDX].name]  + '" target="_blank" >' +
+                                        QuickMap.identifyLayers.fields[displayIDX].label+'</a></div>';
+                    break;
+                  case "name":
+                    popupContentText += '<div ><b>'+QuickMap.identifyLayers.fields[displayIDX].label+': </b>' + 
+                                        somedata.results[dataIdx].attributes[QuickMap.identifyLayers.fields[displayIDX].name] + '</div>';
+                    break;
+                  default: 
+                    popupContentText += '<div ><b>'+QuickMap.identifyLayers.fields[displayIDX].label+': </b>' + 
+                                        somedata.results[dataIdx].attributes[QuickMap.identifyLayers.fields[displayIDX].name] + '</div>';
+
+
+
+                };
+                
                 popupContentText += '</div>';
 
               }
