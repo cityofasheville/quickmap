@@ -17,6 +17,7 @@ var QuickMap = {
     "service":"bc_parcels",
     "layers":[{
       "layerindex":0,
+      "layerlabel":"Parcels",
       fields:[{
           "id":0,
           "name":"pinnum",
@@ -32,11 +33,12 @@ var QuickMap = {
       },
       {
       "layerindex":1,
+      "layerlabel":"Zoning",
       fields:[{
         "id":0,
         "name":"districts",
         "style":"key", //key,text,url,num
-        "label":"District"
+        "label":"Zonning District"
       },
       {
         "id":1,
