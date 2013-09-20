@@ -13,6 +13,15 @@ var QuickMap = {
   mySRID:2264, //your projection id
   currentRec:0,
   totalRecs:0,
+  identifyLayers:{
+    "layerIndex":0,
+    fields:[{
+      "field":{
+        "name":"pinnum",
+        "style":"key", //key,text,url,num
+      },
+    }],
+  },
   setTotalRecs:function(val){QuickMap.totalRecs=val;},
   setCurrentRec:function(val){QuickMap.currentRec=val;},
   zoomMap :function(data){
@@ -28,47 +37,79 @@ var QuickMap = {
             QuickMap.setTotalRecs(somedata.results.length);
             popupContentText = '';
             popupHeaderText = '';
-            popupHeaderText = '<h4>Found '+somedata.results.length+' records!</h4>'
-            if(somedata.results.length > 1) {
-              popupHeaderText += '<select class="form-control input-sm text-info"  onchange="QuickMap.toggleRec('+somedata.results.length+',this.value)" >'
-              for (var i=0;i<somedata.results.length;i++ ) {
-                popupHeaderText +=  '<option value="'+i+'" class="input-sm text-info" >'+somedata.results[i].attributes.pinnum + '</option>';
-              }
-              popupHeaderText += '</select>';
-            }
-            
-            for (var i=0;i<somedata.results.length;i++ ) {
-                tActive='';
-                if(i==0){tActive=' active'}else{tActive=' deactive'};
-                //popupContentText += '<div id="results'+i+'" class="record_list'+tActive+'" >' + somedata.results[i].attributes.pinnum + '</div>';
-                popupContentText += '<div id="results'+i+'" class="record_list'+tActive+'" >';
-                popupContentText += '<div ><b>PIN: </b>' + somedata.results[i].attributes.pinnum + '</div>';
-                popupContentText += '<div ><b>Owner: </b>' + somedata.results[i].attributes.owner + '</div>';                
-                //popupContentText += '<div ><b>Address: </b>' + somedata.results[i].attributes.address + '</div>';
-                addressmaker = ' ';
-                addressmaker += somedata.results[i].attributes.housenumber.isNull(' ') + ' ';
-                addressmaker = addressmaker.replace('  ',' ')
-                addressmaker += somedata.results[i].attributes.numbersuffix.isNull(' ') + ' ';
-                addressmaker = addressmaker.replace('  ',' ')
-                addressmaker += somedata.results[i].attributes.direction.isNull(' ') + ' ';
-                addressmaker = addressmaker.replace('  ',' ')
-                addressmaker += somedata.results[i].attributes.streetname.isNull(' ') + ' ';
-                addressmaker = addressmaker.replace('  ',' ')
-                addressmaker += somedata.results[i].attributes.streettype.isNull(' ') + ' ';
-                addressmaker = addressmaker.replace('  ',' ')
+            popupHeaderText = '<h4>Found '+QuickMap.totalRecs+' records!</h4>'
 
-                popupContentText += '<div ><b>Address: </b>' + 
-                                      addressmaker +
-                                    '</div>';
-                    
-                popupContentText += '<div ><b>Acreage: </b>' + somedata.results[i].attributes.acreage + '</div>';
-                popupContentText += '<div ><b>Tax value: </b>' + somedata.results[i].attributes.taxvalue  + '</div>';
-                popupContentText += '<div ><b>Buidling value: </b>' + somedata.results[i].attributes.buildingvalue  + '</div>';
-                popupContentText += '<div ><a href="' + somedata.results[i].attributes.propcard  + '" target="_blank" >Property Card</a></div>';
-                popupContentText += '<div ><a href="' + somedata.results[i].attributes.platurl  + '" target="_blank" >Plat</a></div>';
-                popupContentText += '<div ><a href="' + somedata.results[i].attributes.deedurl  + '" target="_blank" >Deed</a></div>';
+             if(QuickMap.totalRecs > 1) {
+                popupHeaderText += '<select class="form-control input-sm text-info"  onchange="QuickMap.toggleRec('+QuickMap.totalRecs+',this.value)" >'
+                for (var dataIdx=0;dataIdx<QuickMap.totalRecs;dataIdx++ ) {
+                  for (var displayIDX=0;displayIDX<QuickMap.identifyLayers.fields.length;displayIDX++ ){
+                    if(somedata.results[dataIdx].attributes[QuickMap.identifyLayers.fields[displayIDX].field.style] = 'key'){
+                      popupHeaderText +=  '<option value="'+dataIdx+'" class="input-sm text-info" >'+somedata.results[dataIdx].attributes[QuickMap.identifyLayers.fields[displayIDX].field.name]  + '</option>';
+                    }
+                  }
+                }
+                popupHeaderText += '</select>';
+              }                
+
+
+            for (var dataIdx=0;dataIdx<somedata.results.length;dataIdx++ ){
+ 
+              for (var displayIDX=0;displayIDX<QuickMap.identifyLayers.fields.length;displayIDX++ ){
+                tActive='';
+                if(dataIdx==0){tActive=' active'}else{tActive=' deactive'};
+                popupContentText += '<div id="results'+dataIdx+'" class="record_list'+tActive+'" >';
+                popupContentText += '<div ><b>PIN: </b>' + somedata.results[dataIdx].attributes[QuickMap.identifyLayers.fields[displayIDX].field.name] + '</div>';
                 popupContentText += '</div>';
+
+              }
+
+              //popupContentText += QuickMap.identifyLayers.fields[i].field.name;
+              //popupContentText += QuickMap.identifyLayers.fields[i].field.style;  //["name"] + '-' + QuickMap.identifyLayers.fields[i].name.field.style
             };
+
+
+
+
+            // if(somedata.results.length > 1) {
+            //   popupHeaderText += '<select class="form-control input-sm text-info"  onchange="QuickMap.toggleRec('+somedata.results.length+',this.value)" >'
+            //   for (var i=0;i<somedata.results.length;i++ ) {
+            //     popupHeaderText +=  '<option value="'+i+'" class="input-sm text-info" >'+somedata.results[i].attributes.pinnum + '</option>';
+            //   }
+            //   popupHeaderText += '</select>';
+            // }
+            
+            // for (var i=0;i<somedata.results.length;i++ ) {
+            //     tActive='';
+            //     if(i==0){tActive=' active'}else{tActive=' deactive'};
+            //     //popupContentText += '<div id="results'+i+'" class="record_list'+tActive+'" >' + somedata.results[i].attributes.pinnum + '</div>';
+            //     popupContentText += '<div id="results'+i+'" class="record_list'+tActive+'" >';
+            //     popupContentText += '<div ><b>PIN: </b>' + somedata.results[i].attributes.pinnum + '</div>';
+            //     popupContentText += '<div ><b>Owner: </b>' + somedata.results[i].attributes.owner + '</div>';                
+            //     //popupContentText += '<div ><b>Address: </b>' + somedata.results[i].attributes.address + '</div>';
+            //     addressmaker = ' ';
+            //     addressmaker += somedata.results[i].attributes.housenumber.isNull(' ') + ' ';
+            //     addressmaker = addressmaker.replace('  ',' ')
+            //     addressmaker += somedata.results[i].attributes.numbersuffix.isNull(' ') + ' ';
+            //     addressmaker = addressmaker.replace('  ',' ')
+            //     addressmaker += somedata.results[i].attributes.direction.isNull(' ') + ' ';
+            //     addressmaker = addressmaker.replace('  ',' ')
+            //     addressmaker += somedata.results[i].attributes.streetname.isNull(' ') + ' ';
+            //     addressmaker = addressmaker.replace('  ',' ')
+            //     addressmaker += somedata.results[i].attributes.streettype.isNull(' ') + ' ';
+            //     addressmaker = addressmaker.replace('  ',' ')
+
+            //     popupContentText += '<div ><b>Address: </b>' + 
+            //                           addressmaker +
+            //                         '</div>';
+                    
+            //     popupContentText += '<div ><b>Acreage: </b>' + somedata.results[i].attributes.acreage + '</div>';
+            //     popupContentText += '<div ><b>Tax value: </b>' + somedata.results[i].attributes.taxvalue  + '</div>';
+            //     popupContentText += '<div ><b>Buidling value: </b>' + somedata.results[i].attributes.buildingvalue  + '</div>';
+            //     popupContentText += '<div ><a href="' + somedata.results[i].attributes.propcard  + '" target="_blank" >Property Card</a></div>';
+            //     popupContentText += '<div ><a href="' + somedata.results[i].attributes.platurl  + '" target="_blank" >Plat</a></div>';
+            //     popupContentText += '<div ><a href="' + somedata.results[i].attributes.deedurl  + '" target="_blank" >Deed</a></div>';
+            //     popupContentText += '</div>';
+            //};
             
 
             //Add Popup to the map when the mouse was clicked at
