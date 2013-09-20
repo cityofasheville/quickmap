@@ -1,3 +1,9 @@
+String.prototype.isNull = function(replaceValue) {
+
+    if(replaceValue==null){rep='';}else{rep=replaceValue}
+
+    if(this==null || this=='Null'){return rep;}else{return this;}
+  };  
 var QuickMap = QuickMap || {};
 var QuickMap = {
 
@@ -38,7 +44,24 @@ var QuickMap = {
                 popupContentText += '<div id="results'+i+'" class="record_list'+tActive+'" >';
                 popupContentText += '<div ><b>PIN: </b>' + somedata.results[i].attributes.pinnum + '</div>';
                 popupContentText += '<div ><b>Owner: </b>' + somedata.results[i].attributes.owner + '</div>';                
-                popupContentText += '<div ><b>Address: </b>' + somedata.results[i].attributes.address + '</div>';
+                //popupContentText += '<div ><b>Address: </b>' + somedata.results[i].attributes.address + '</div>';
+                addressmaker = ' ';
+                addressmaker += somedata.results[i].attributes.housenumber.isNull(' ') + ' ';
+                addressmaker = addressmaker.replace('  ',' ')
+                addressmaker += somedata.results[i].attributes.numbersuffix.isNull(' ') + ' ';
+                addressmaker = addressmaker.replace('  ',' ')
+                addressmaker += somedata.results[i].attributes.direction.isNull(' ') + ' ';
+                addressmaker = addressmaker.replace('  ',' ')
+                addressmaker += somedata.results[i].attributes.streetname.isNull(' ') + ' ';
+                addressmaker = addressmaker.replace('  ',' ')
+                addressmaker += somedata.results[i].attributes.streettype.isNull(' ') + ' ';
+                addressmaker = addressmaker.replace('  ',' ')
+
+                popupContentText += '<div ><b>Address: </b>' + 
+                                      addressmaker +
+                                    '</div>';
+                    
+                popupContentText += '<div ><b>Acreage: </b>' + somedata.results[i].attributes.acreage + '</div>';
                 popupContentText += '<div ><b>Tax value: </b>' + somedata.results[i].attributes.taxvalue  + '</div>';
                 popupContentText += '<div ><b>Buidling value: </b>' + somedata.results[i].attributes.buildingvalue  + '</div>';
                 popupContentText += '<div ><a href="' + somedata.results[i].attributes.propcard  + '" target="_blank" >Property Card</a></div>';
