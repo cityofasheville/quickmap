@@ -13,16 +13,19 @@ var QuickMap = {
   mySRID:2264, //your projection id
   currentRec:0,
   totalRecs:0,
-  identifyLayers:{
-    "layerIndex":0,
-    fields:[{
+  identifyConfig:{
+    "service":"bc_parcels",
+    "layers":[{
+      "layerindex":0,
+      fields:[{
         "id":0,
         "name":"pinnum",
         "style":"key", //key,text,url,num
         "label":"PIN"
       }],
+    }],
   },
-  setIdentifyLayers:function(val){QuickMap.identifyLayers=val},
+  setIdentifyConfig:function(val){QuickMap.identifyConfig=val},
   setTotalRecs:function(val){QuickMap.totalRecs=val;},
   setCurrentRec:function(val){QuickMap.currentRec=val;},
   zoomMap :function(data){
@@ -34,74 +37,96 @@ var QuickMap = {
     return '';
   },
   retLayerInfo:function(somedata,eventData){
+      
+      popupContentText = '';
+      popupHeaderText = '';
+      //loop layers
+      for(var layerIdx=0;layerIdx<QuickMap.identifyConfig.layers.length;layerIdx++){
+        popupHeaderText += QuickMap.identifyConfig.layers[layerIdx].layerindex +'<br/>'
+      };
+      //if records exist
       if(somedata.results.length > 0) {
-            QuickMap.setTotalRecs(somedata.results.length);
-            popupContentText = '';
-            popupHeaderText = '';
-            popupHeaderText = '<h4>Found '+QuickMap.totalRecs+' records!</h4>'
+        //make sure layer indexes match and we are on the correct layer.
+        //if(somedata.results[0].layerIdx == QuickMap.identifyConfig.layers[0].layerindex){
+          QuickMap.setTotalRecs(somedata.results.length);
+          popupHeaderText += '<h5><span class="badge pull-left badge-info">'+QuickMap.totalRecs+' </span> ' +somedata.results[0].layerName + '</h5>'
 
-             
-             if(QuickMap.totalRecs > 1) {
-                popupHeaderText += '<select class="form-control input-sm text-info"  onchange="QuickMap.toggleRec('+QuickMap.totalRecs+',this.value)" >'
-                for (var dataIdx=0;dataIdx<QuickMap.totalRecs;dataIdx++ ) {
-                  for (var displayIDX=0;displayIDX<QuickMap.identifyLayers.fields.length;displayIDX++ ){
-                    if(QuickMap.identifyLayers.fields[displayIDX].style == 'key'){
-                      popupHeaderText +=  '<option value="'+dataIdx+'" class="input-sm text-info" >'+somedata.results[dataIdx].attributes[QuickMap.identifyLayers.fields[displayIDX].name]  + '</option>';
-                    }
-                  }
-                }
-                popupHeaderText += '</select>';
-              }                
-
-
+          //setup header pulldown if there is a key set only when more than record returned            
+          if(QuickMap.totalRecs > 1) {
+            //setup header if its a key make it a pulldown
+            popupHeaderText += '<select class="form-control input-sm text-info"  onchange="QuickMap.toggleRec('+QuickMap.totalRecs+',this.value)" >'
+            //loop records
             for (var dataIdx=0;dataIdx<QuickMap.totalRecs;dataIdx++ ) {
-              tActive='';
-              if(dataIdx==0){tActive=' active'}else{tActive=' deactive'};
-              popupContentText += '<div id="results'+dataIdx+'" class="record_list'+tActive+'" >';  
-              for (var displayIDX=0;displayIDX<QuickMap.identifyLayers.fields.length;displayIDX++ ){
-                switch(QuickMap.identifyLayers.fields[displayIDX].style){
-                  case "key":
-                    popupContentText += '<div><b>'+QuickMap.identifyLayers.fields[displayIDX].label+': </b>' + 
-                                        somedata.results[dataIdx].attributes[QuickMap.identifyLayers.fields[displayIDX].name] + '</div>';
-                    break;
-                  case "text":
-                    popupContentText += '<div><b>'+QuickMap.identifyLayers.fields[displayIDX].label+': </b>' + 
-                                        somedata.results[dataIdx].attributes[QuickMap.identifyLayers.fields[displayIDX].name] + '</div>';
-                    break;
-                  case "url":
-                    popupContentText += '<div ><a href="' + somedata.results[dataIdx].attributes[QuickMap.identifyLayers.fields[displayIDX].name]  + '" target="_blank" >' +
-                                        QuickMap.identifyLayers.fields[displayIDX].label+'</a></div>';
-                    break;
-                  case "number":
-                    popupContentText += '<div ><b>'+QuickMap.identifyLayers.fields[displayIDX].label+': </b>' + 
-                                        somedata.results[dataIdx].attributes[QuickMap.identifyLayers.fields[displayIDX].name] + '</div>';
-                    break;
-                  case "currency":
-                    popupContentText += '<div ><b>'+QuickMap.identifyLayers.fields[displayIDX].label+': </b>' + 
-                                        '$'+parseInt(somedata.results[dataIdx].attributes[QuickMap.identifyLayers.fields[displayIDX].name]).toFixed(2) + '</div>';
-                    break;
-                  default: 
-                     popupContentText += '<div><b>'+QuickMap.identifyLayers.fields[displayIDX].label+': </b>' + 
-                                        somedata.results[dataIdx].attributes[QuickMap.identifyLayers.fields[displayIDX].name] + '</div>';
-                    break;
-               };                
-              }
-              popupContentText += '</div>';
-            };
+              //loop Fields for identifing from configuration
+              for (var displayIDX=0;displayIDX<QuickMap.identifyConfig.layers[0].fields.length;displayIDX++ ){
+                //if field is the key make the option
+                if(QuickMap.identifyConfig.layers[0].fields[displayIDX].style == 'key'){
+                  popupHeaderText +=  '<option value="'+dataIdx+'" class="input-sm text-info" >'+somedata.results[dataIdx].attributes[QuickMap.identifyConfig.layers[0].fields[displayIDX].name]  + '</option>';
+                }
+              } //loop Fields
+            }//loop records
+            popupHeaderText += '</select><br />';
+          }                
 
-           
+           //setup header pulldown if there is a key set.  loop records
+          for (var dataIdx=0;dataIdx<QuickMap.totalRecs;dataIdx++ ) {
+            tActive='';
+            //set intial  active record. when multiple records returned
+            //this is the first record
+            if(dataIdx==0){tActive=' active'}else{tActive=' deactive'};
+            popupContentText += '<div id="results'+dataIdx+'" class="record_list'+tActive+'" >';  
+            //index
+            popupContentText += '<div>'+(dataIdx+1)+' of '+QuickMap.totalRecs+'</div>';        
+            //loop all the fields  
+            for (var displayIDX=0;displayIDX<QuickMap.identifyConfig.layers[0].fields.length;displayIDX++ ){
+              //format fields from confuiguration
+              
+              switch(QuickMap.identifyConfig.layers[0].fields[displayIDX].style){
+                case "key":
+                  popupContentText += '<div><b>'+QuickMap.identifyConfig.layers[0].fields[displayIDX].label+': </b>' + 
+                                      somedata.results[dataIdx].attributes[QuickMap.identifyConfig.layers[0].fields[displayIDX].name] + '</div>';
+                  break;
+                case "text":
+                  popupContentText += '<div><b>'+QuickMap.identifyConfig.layers[0].fields[displayIDX].label+': </b>' + 
+                                      somedata.results[dataIdx].attributes[QuickMap.identifyConfig.layers[0].fields[displayIDX].name] + '</div>';
+                  break;
+                case "url":
+                  popupContentText += '<div ><a href="' + somedata.results[dataIdx].attributes[QuickMap.identifyConfig.layers[0].fields[displayIDX].name]  + '" target="_blank" >' +
+                                      QuickMap.identifyConfig.layers[0].fields[displayIDX].label+'</a></div>';
+                  break;
+                case "number":
+                  popupContentText += '<div ><b>'+QuickMap.identifyConfig.layers[0].fields[displayIDX].label+': </b>' + 
+                                      somedata.results[dataIdx].attributes[QuickMap.identifyConfig.layers[0].fields[displayIDX].name] + '</div>';
+                  break;
+                case "currency":
+                  popupContentText += '<div ><b>'+QuickMap.identifyConfig.layers[0].fields[displayIDX].label+': </b>' + 
+                                      '$'+parseInt(somedata.results[dataIdx].attributes[QuickMap.identifyConfig.layers[0].fields[displayIDX].name]).toFixed(2) + '</div>';
+                  break;
+                default: 
+                   popupContentText += '<div><b>'+QuickMap.identifyConfig.layers[0].fields[displayIDX].label+': </b>' + 
+                                      somedata.results[dataIdx].attributes[QuickMap.identifyConfig.layers[0].fields[displayIDX].name] + '</div>';
+                  break;
+             };//format fields             
+            }//loop fields
+            popupContentText += '</div>';
+         // };//layer indexes
+        };//loop records
+      }else{
+        popupHeaderText = '<h4>Nothing found!</h4>'
+      }
 
-            //Add Popup to the map when the mouse was clicked at
-             popup = new L.Popup({
-              maxWidth: 250,
-              maxHeight: 250,
-              minHeight: 50,
-            });
+      //Add Popup to the map when the mouse was clicked at
+       popup = new L.Popup({
+        maxWidth: 250,
+        minWidth: 200,
+        maxHeight: 250,
+        minHeight: 50,
+      });
 
-            popup.setLatLng(eventData.latlng);
-            popup.setContent(popupHeaderText+popupContentText);
-            map.openPopup(popup);
-        }
+      popup.setLatLng(eventData.latlng);
+      popup.setContent(popupHeaderText+popupContentText);
+      map.openPopup(popup);
+        
   },
   toggleRec:function(total,index){
       QuickMap.setCurrentRec(index)
@@ -126,18 +151,34 @@ var QuickMap = {
          error:function(x,t,m){console.log('fail');}//updateResultsFail(t,'Error with transforming to WGS84!')
      });
   },
+  getIdentifyLayerList:function(){
+    lyr='';
+    for(var layerIDX=0;layerIDX<QuickMap.identifyConfig.layers.length;layerIDX++){
+      lyr += QuickMap.identifyConfig.layers[layerIDX].layerindex;
+      lyr += ',';
+    };
+    ret=lyr.substring(0, lyr.length-1);
+    return ret
+  },
+  getIdentifyService:function(){
+    srv=QuickMap.identifyConfig.service;
+    ret=srv;
+    return ret
+  },
   getLayerInfo:function(somedata,eventData){
     xStr=somedata.geometries[0].x;
     yStr=somedata.geometries[0].y;
- 
+    lyrs=QuickMap.getIdentifyLayerList();
+
     aPt =  JSON.stringify( {"x":xStr,"y":yStr,"spatialReference":{"wkid":QuickMap.mySRID}}) 
     bbox = JSON.stringify(
       {
         "xmin":map.getBounds()._southWest.lng,"ymin":map.getBounds()._southWest.lat,"xmax":map.getBounds()._northEast.lng,"ymax":map.getBounds()._northEast.lat,"spatialReference":{"wkid":4326}
       })
- 
-    urlStr = 'http://'+QuickMap.agsServerGeocode+'/'+QuickMap.agsServerInstanceNameGeocode+'/rest/services/OpenDataAsheville/bc_parcels/MapServer/identify';
-    data={f:"json",sr:QuickMap.mySRID,layers:0,geometry:aPt,imageDisplay:"800,600,96",tolerance:3,mapExtent:bbox,geometryType:"esriGeometryPoint",returnGeometry:false};
+   
+    identifyService=QuickMap.getIdentifyService();
+    urlStr = 'http://'+QuickMap.agsServerGeocode+'/'+QuickMap.agsServerInstanceNameGeocode+'/rest/services/OpenDataAsheville/'+identifyService+'/MapServer/identify';
+    data={f:"json",sr:QuickMap.mySRID,layers:lyrs,geometry:aPt,imageDisplay:"800,600,96",tolerance:3,mapExtent:bbox,geometryType:"esriGeometryPoint",returnGeometry:false};
 
        $.ajax({
         url: urlStr,
