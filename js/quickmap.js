@@ -95,7 +95,7 @@ var QuickMap = {
            success:function(data){
             
             selectBox += '<label class="text-info" for="mapsearch">Choose the '+QuickMap.dataMapConfig.fields[0].fieldLabel+'</label>';
-            selectBox += '<select id="mapsearch" class="form-control input-sm text-info"  onchange="QuickMap.zoomMap(this.value,15,false)" >';
+            selectBox += '<select id="mapsearch" class="form-control input-sm text-info"  onchange="QuickMap.zoomMap(this.value,16,false)" >';
             
             for(var dataIdx=0;dataIdx<data.features.length;dataIdx++ ){
               
@@ -150,7 +150,7 @@ var QuickMap = {
         popupHeaderText += '<h5><span class="badge pull-left badge-info">'+QuickMap.totalRecs+' </span>&nbsp;items found!</h5>'
 
         //loop layers
-        popupHeaderText += '<select class="form-control input-sm text-info"  onchange="QuickMap.toggleRec('+QuickMap.totalRecs+',this.value,\'layers\')" >'
+        popupHeaderText += '<select class="form-control input-sm text-info"  onchange="QuickMap.toggleRec('+QuickMap.totalRecs+',this.value,\'layers\'),QuickMap.toggleRec('+QuickMap.totalRecs+',this.value,\'layerrecs\')" >'
         for(var layerIdx=0;layerIdx<QuickMap.identifyConfig.layers.length;layerIdx++){
           popupHeaderText +=  '<option value="'+ QuickMap.identifyConfig.layers[layerIdx].layerindex+'" class="input-sm text-info" >'+ QuickMap.identifyConfig.layers[layerIdx].layerlabel + '</option>';        
           //for (var displayIDX=0;displayIDX<QuickMap.identifyConfig.layers[layerIdx].fields.length;displayIDX++ ){
@@ -159,7 +159,7 @@ var QuickMap = {
           //}
           
         };
-        popupHeaderText += '</select><br />';        
+        popupHeaderText += '</select>';        
 
         //make sure layer indexes match and we are on the correct layer.
         //if(somedata.results[0].layerIdx == QuickMap.identifyConfig.layers[0].layerindex){
@@ -168,19 +168,27 @@ var QuickMap = {
 
         //setup header pulldown if there is a key set only when more than record returned            
         if(QuickMap.totalRecs > 1) {
-          //setup header if its a key make it a pulldown
-          popupHeaderText += '<span>&nbsp;&nbsp</span><select class="form-control input-sm text-info"  onchange="QuickMap.toggleRec('+QuickMap.totalRecs+',this.value,\'results\')" >'
-          //loop records
-          for (var dataIdx=0;dataIdx<QuickMap.totalRecs;dataIdx++ ) {
-            //loop Fields for identifing from configuration
-            for (var displayIDX=0;displayIDX<QuickMap.identifyConfig.layers[0].fields.length;displayIDX++ ){
-              //if field is the key make the option
-              if(QuickMap.identifyConfig.layers[0].fields[displayIDX].style == 'key'){
-                popupHeaderText +=  '<span>&nbsp;&nbsp</span><option value="'+dataIdx+'" class="input-sm text-info" >'+somedata.results[dataIdx].attributes[QuickMap.identifyConfig.layers[0].fields[displayIDX].name]  + '</option>';
-              }
-            } //loop Fields
-          }//loop records
-          popupHeaderText += '<span>&nbsp;&nbsp</span></select><br />';
+          for(var layerIdx=0;layerIdx<QuickMap.identifyConfig.layers.length;layerIdx++){
+            //setup header if its a key make it a pulldown
+            lrActive='';
+            if(layerIdx==0){lrActive=' active'}else{lrActive=' deactive'};
+            popupHeaderText += '<div id="layers'+layerIdx+'" class="layerrec_list'+lrActive+'" >';
+            popupHeaderText += '<span>&nbsp;&nbsp</span><select class="form-control input-sm text-info"  onchange="QuickMap.toggleRec('+QuickMap.totalRecs+',this.value,\'results\')" >'
+            //loop records
+            for (var dataIdx=0;dataIdx<QuickMap.totalRecs;dataIdx++ ) {
+              //loop Fields for identifing from configuration
+              for (var displayIDX=0;displayIDX<QuickMap.identifyConfig.layers[layerIdx].fields.length;displayIDX++ ){
+                //if field is the key make the option
+                if(QuickMap.identifyConfig.layers[layerIdx].fields[displayIDX].style == 'key'){
+                  if(QuickMap.identifyConfig.layers[layerIdx].layerindex == somedata.results[dataIdx].layerId){
+                    popupHeaderText +=  '<span>&nbsp;&nbsp</span><option value="'+dataIdx+'" class="input-sm text-info" >'+somedata.results[dataIdx].attributes[QuickMap.identifyConfig.layers[layerIdx].fields[displayIDX].name]  + '</option>';
+                }
+                }
+              } //loop Fields
+            }//loop records
+            popupHeaderText += '<span>&nbsp;&nbsp</span></select>';
+            popupHeaderText += '</div>';
+          }
         }//if recs
 
 
@@ -199,7 +207,7 @@ var QuickMap = {
             lActive='';
             if(layerIdx==0){lActive=' active'}else{lActive=' deactive'};
             if (QuickMap.identifyConfig.layers[layerIdx].layerindex == somedata.results[dataIdx].layerId ){
-              popupContentText += '<div id="layers'+layerIdx+'" class="layer_list'+lActive+'" >';
+              //popupContentText += '<div id="layers'+layerIdx+'" class="layer_list'+lActive+'" >';
               for (var displayIDX=0;displayIDX<QuickMap.identifyConfig.layers[layerIdx].fields.length;displayIDX++ ){
                 //format fields from confuiguration
                 if(somedata.results[dataIdx].attributes[QuickMap.identifyConfig.layers[layerIdx].fields[displayIDX].name]){
@@ -231,7 +239,7 @@ var QuickMap = {
                 };//format fields
                 }
               }//loop fields
-              popupContentText += '</div>';
+             // popupContentText += '</div>';
             }
           }//loop layers
           popupContentText += '</div>';
