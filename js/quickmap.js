@@ -149,7 +149,8 @@ var QuickMap = {
           for (var displayIDX=0;displayIDX<QuickMap.identifyConfig.layers[layerIdx].fields.length;displayIDX++ ){
 
             jsonlFeildsObj.push({fieldname:QuickMap.identifyConfig.layers[layerIdx].fields[displayIDX].label,
-              fieldvalue:somedata.results[dataIdx].attributes[QuickMap.identifyConfig.layers[layerIdx].fields[displayIDX].name] });
+              fieldstyle:QuickMap.identifyConfig.layers[layerIdx].fields[displayIDX].style,
+              fieldvalue:somedata.results[dataIdx].attributes[QuickMap.identifyConfig.layers[layerIdx].fields[displayIDX].name],});
           }
           jsonlRecsObj.push({recordnum:dataIdx,
             attributes:jsonlFeildsObj})
@@ -173,13 +174,41 @@ var QuickMap = {
           for(var a=0;a<jsonLayerObj[i].features[f].attributes.length;a++){            
             name=jsonLayerObj[i].features[f].attributes[a].fieldname;
             val=jsonLayerObj[i].features[f].attributes[a].fieldvalue;
+            style=jsonLayerObj[i].features[f].attributes[a].fieldstyle;
             if(val){
               reccnt+=1
               if(a==0){
-                popupContentText += '<div class="media"><a class="pull-left" href="#"><button type="button" class="btn btn-default">'+reccnt+'</button></a><div class="media-body">'
+                    popupContentText += '<div class="media"><a class="pull-left" href="#"><button type="button" class="btn btn-default">'+reccnt+'</button></a><div class="media-body">'
               }
-              popupContentText += '<span><b>&nbsp;&nbsp;'+name+':&nbsp</b></span>'
-              popupContentText += val+'</span><br/>'
+
+             
+              switch(style){
+                case'key':
+                  popupContentText += '<span><b'+name+':&nbsp</b></span>'
+                  popupContentText += '<b>'+val+'</b></span><br/>'
+                  break;
+                case'url':
+                  popupContentText += '<a href="'+val+'" target="_blank" >'+name+'</a></span><br/>'
+                  break;
+                case'text':
+                  popupContentText += '<span><b>'+name+':&nbsp</b></span>'
+                  popupContentText += val+'</span><br/>'
+                  break;
+                case'number':
+                  popupContentText += '<span><b>'+name+':&nbsp</b></span>'
+                  popupContentText += val+'</span><br/>'
+                  break;
+                case'currency':
+                  popupContentText += '<span><b>'+name+':&nbsp</b></span>'
+                  popupContentText += '$'+val+'</span><br/>'
+                  break;                    
+                default:
+                  popupContentText += '<span><b>'+name+':&nbsp</b></span>'
+                  popupContentText += val+'</span><br/>'
+                  break;
+              }
+
+              
               if(a==jsonLayerObj[i].features[f].attributes.length-1){
                 popupContentText += '</div></div>'
               }
