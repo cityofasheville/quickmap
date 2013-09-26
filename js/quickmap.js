@@ -178,7 +178,7 @@ var QuickMap = {
             if(val){
               reccnt+=1
               if(a==0){
-                    popupContentText += '<div class="media"><a class="pull-left" href="#"><button type="button" class="btn btn-default">'+reccnt+'</button></a><div class="media-body">'
+                    popupContentText += '<div class="media"><a class="pull-left" href="#"><button type="button" class="btn  btn-info">'+reccnt+'</button></a><div class="media-body">'
               }
 
              
