@@ -161,19 +161,15 @@ var QuickMap = {
       jsonlRecsObj = []
     }
 
-    //alert(JSON.stringify(jsonLayerObj))      
+
        popupContentText = '';
        popupHeaderText = '';
-       //popupContentText += JSON.stringify(jsonLayerObj);
 
 
        for(var i=0;i<jsonLayerObj.length;i++){
         popupContentText += '<div ><h4>'+jsonLayerObj[i].layername+'</h4></div>'
-        //popupContentText += '<div >Features:'+jsonLayerObj[i].features.length+'</div>'
         reccnt=0
-        for(var f=0;f<jsonLayerObj[i].features.length;f++){
-          //popupContentText += '<div >Features:'+jsonLayerObj[i].features[f].attributes.length+'</div>'
-          
+        for(var f=0;f<jsonLayerObj[i].features.length;f++){         
           for(var a=0;a<jsonLayerObj[i].features[f].attributes.length;a++){            
             name=jsonLayerObj[i].features[f].attributes[a].fieldname;
             val=jsonLayerObj[i].features[f].attributes[a].fieldvalue;
@@ -191,123 +187,6 @@ var QuickMap = {
           }
         }
        }
-
-      // //if records exist
-      // if(somedata.results.length > 0) {
-
-      //   QuickMap.setTotalRecs(somedata.results.length);
-      //   popupHeaderText += '<h5><span class="badge pull-left badge-info">'+QuickMap.totalRecs+' </span>&nbsp;items found!</h5>'
-
-      //   //loop layers
-      //   popupHeaderText += '<select class="form-control input-sm text-info"  onchange="QuickMap.toggleRec('+QuickMap.totalRecs+',this.value,\'layerslist\'),QuickMap.toggleRec('+QuickMap.totalRecs+',this.value,\'layers\')" >'
-      //   for(var layerIdx=0;layerIdx<QuickMap.identifyConfig.layers.length;layerIdx++){
-      //     popupHeaderText +=  '<option value="'+ QuickMap.identifyConfig.layers[layerIdx].layerindex+'" class="input-sm text-info" >'+ QuickMap.identifyConfig.layers[layerIdx].layerlabel + '</option>';        
-      //     //for (var displayIDX=0;displayIDX<QuickMap.identifyConfig.layers[layerIdx].fields.length;displayIDX++ ){
-      //       //popupHeaderText += QuickMap.identifyConfig.layers[layerIdx].layerindex
-      //       //popupHeaderText += QuickMap.identifyConfig.layers[layerIdx].fields[displayIDX].name +'<br/>'
-      //     //}
-          
-      //   };
-      //   popupHeaderText += '</select>';        
-
-      //   //make sure layer indexes match and we are on the correct layer.
-      //   //if(somedata.results[0].layerIdx == QuickMap.identifyConfig.layers[0].layerindex){
-        
-      //   //popupHeaderText += '<h5><span class="badge pull-left badge-info">'+QuickMap.totalRecs+' </span> ' +somedata.results[0].layerName + '</h5>'
-
-      //   //setup header pulldown if there is a key set only when more than record returned            
-      //   if(QuickMap.totalRecs > 1) {
-      //     for(var layerIdx=0;layerIdx<QuickMap.identifyConfig.layers.length;layerIdx++){
-      //       //setup header if its a key make it a pulldown
-      //       lrActive='';
-      //       if(layerIdx==0){lrActive=' active'}else{lrActive=' deactive'};
-      //       popupHeaderText += '<div id="layerslist'+layerIdx+'" class="layerrec_list'+lrActive+'" >';
-      //       popupHeaderText += '<span>&nbsp;&nbsp</span><select class="form-control input-sm text-info"  onchange="QuickMap.toggleRec('+QuickMap.totalRecs+',this.value,\'results\'),QuickMap.toggleRec('+QuickMap.totalRecs+',this.value,\'layerresults\')" >'
-      //       //loop records
-      //       for (var dataIdx=0;dataIdx<QuickMap.totalRecs;dataIdx++ ) {
-      //         //loop Fields for identifing from configuration
-      //         for (var displayIDX=0;displayIDX<QuickMap.identifyConfig.layers[layerIdx].fields.length;displayIDX++ ){
-      //           //if field is the key make the option
-      //           if(QuickMap.identifyConfig.layers[layerIdx].fields[displayIDX].style == 'key'){
-      //             if(QuickMap.identifyConfig.layers[layerIdx].layerindex == somedata.results[dataIdx].layerId){
-      //               popupHeaderText +=  '<span>&nbsp;&nbsp</span><option value="'+layerIdx+'-'+dataIdx+'" class="input-sm text-info" >'+somedata.results[dataIdx].attributes[QuickMap.identifyConfig.layers[layerIdx].fields[displayIDX].name]  + '</option>';
-      //           }
-      //           }
-      //         } //loop Fields
-      //       }//loop records
-      //       popupHeaderText += '<span>&nbsp;&nbsp</span></select>';
-      //       popupHeaderText += '</div>';
-      //     }
-      //   }//if recs
-
-
-      //   //setup header pulldown if there is a key set.  loop records
-        
-
-
-         
-       
-          
-      //     for(var layerIdx=0;layerIdx<QuickMap.identifyConfig.layers.length;layerIdx++){
-
-      //       lActive='';
-      //       if(layerIdx==0){lActive=' active'}else{lActive=' deactive'};
-      //       popupContentText += '<div id="layers'+layerIdx+'" class="layer_list'+lActive+'" >';
-
-      //     for (var dataIdx=0;dataIdx<QuickMap.totalRecs;dataIdx++ ) {
-
-  
-      //       tActive='';
-      //       if(dataIdx==0){tActive=' active'}else{tActive=' deactive'};
-      //       popupContentText += '<div id="layerresults'+layerIdx+'-'+dataIdx+'" class="record_list'+tActive+'" >';
-
-      //       //index
-      //       popupContentText += '<div>'+(dataIdx+1)+' of '+QuickMap.totalRecs+'</div>';
-
-      //       //loop all the fields
-      //       if (QuickMap.identifyConfig.layers[layerIdx].layerindex == somedata.results[dataIdx].layerId ){
-              
-      //         for (var displayIDX=0;displayIDX<QuickMap.identifyConfig.layers[layerIdx].fields.length;displayIDX++ ){
-      //           //format fields from confuiguration
-      //           if(somedata.results[dataIdx].attributes[QuickMap.identifyConfig.layers[layerIdx].fields[displayIDX].name]){
-      //           switch(QuickMap.identifyConfig.layers[layerIdx].fields[displayIDX].style){
-      //             case "key":
-      //               popupContentText += '<div>&nbsp;&nbsp;<b>'+QuickMap.identifyConfig.layers[layerIdx].fields[displayIDX].label+': </b>' + 
-      //                                   somedata.results[dataIdx].attributes[QuickMap.identifyConfig.layers[layerIdx].fields[displayIDX].name] + '</div>';
-      //               break;
-      //             case "text":
-      //               popupContentText += '<div>&nbsp;&nbsp;<b>'+QuickMap.identifyConfig.layers[layerIdx].fields[displayIDX].label+': </b>' + 
-      //                                   somedata.results[dataIdx].attributes[QuickMap.identifyConfig.layers[layerIdx].fields[displayIDX].name] + '</div>';
-      //               break;
-      //             case "url":
-      //               popupContentText += '<div >&nbsp;&nbsp;<a href="' + somedata.results[dataIdx].attributes[QuickMap.identifyConfig.layers[layerIdx].fields[displayIDX].name]  + '" target="_blank" >' +
-      //                                   QuickMap.identifyConfig.layers[layerIdx].fields[displayIDX].label+'</a></div>';
-      //               break;
-      //             case "number":
-      //               popupContentText += '<div >&nbsp;&nbsp;<b>'+QuickMap.identifyConfig.layers[layerIdx].fields[displayIDX].label+': </b>' + 
-      //                                   somedata.results[dataIdx].attributes[QuickMap.identifyConfig.layers[layerIdx].fields[displayIDX].name] + '</div>';
-      //               break;
-      //             case "currency":
-      //               popupContentText += '<div >&nbsp;&nbsp;<b>'+QuickMap.identifyConfig.layers[layerIdx].fields[displayIDX].label+': </b>' + 
-      //                                   '$'+parseInt(somedata.results[dataIdx].attributes[QuickMap.identifyConfig.layers[0].fields[displayIDX].name]).toFixed(2) + '</div>';
-      //               break;
-      //             default: 
-      //                popupContentText += '<div&nbsp;&nbsp;><b>'+QuickMap.identifyConfig.layers[layerIdx].fields[displayIDX].label+': </b>' + 
-      //                                   somedata.results[dataIdx].attributes[QuickMap.identifyConfig.layers[layerIdx].fields[displayIDX].name] + '</div>';
-      //               break;
-      //           };//format fields
-      //           }
-      //         }//loop fields              
-      //       }
-      //       popupContentText += '</div>';
-            
-      //     }//loop layers
-      //     popupContentText += '</div>';
-      //   };//loop records
-       
-      // }else{
-      //   popupHeaderText = '<h4>Nothing found!</h4>'
-      // }
 
       //Add Popup to the map when the mouse was clicked at
        popup = new L.Popup({
