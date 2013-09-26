@@ -184,7 +184,7 @@ var QuickMap = {
              
               switch(style){
                 case'key':
-                  popupContentText += '<span><b'+name+':&nbsp</b></span>'
+                  popupContentText += '<span><b>'+name+':&nbsp</b></span>'
                   popupContentText += '<b>'+val+'</b></span><br/>'
                   break;
                 case'url':
