@@ -92,7 +92,7 @@ var QuickMap = {
           dataType: "jsonp",
           data: data,
            crossDomain: true,
-           success:function(data){
+           success:function(data){ 
             
             if (screen.width <= 780) {
 
