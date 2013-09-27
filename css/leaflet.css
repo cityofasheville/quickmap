@@ -426,140 +426,98 @@
 	     -o-transform: rotate(45deg);
 	        transform: rotate(45deg);
 	}
+
 .leaflet-popup-content-wrapper, .leaflet-popup-tip {
 	background: white;
+
 	box-shadow: 0 3px 14px rgba(0,0,0,0.4);
-}
+	}
 a.leaflet-popup-close-button {
-    color: #46B8DA;
-    display: inline-block;
-    font-size: 1em;
-    font-weight: bold;
-    left: 0.25em;
-    line-height: 2;
-    padding: 0.75em;
-    position: relative;
-    text-decoration: none;
-    top: 0.75em;
-    z-index: 2;
+  color: #46B8DA;
+  font-size: 1em;
+  font-weight: bold;
+  text-decoration: none;
+  position: relative;
+  top: 0.75em;
+  left: 0.25em;
+  padding: 0.75em;
+  line-height: 2;
+  display: inline-block;
+  z-index: 2;
 }
 a.leaflet-popup-close-button:hover {
-    color: #DD3C77;
+  color: #428BCA;
 }
 a.leaflet-popup-close-button span {
-    font-size: 85%;
-    font-weight: normal;
-    margin-left: 0.375em;
-    text-transform: uppercase;
+  font-size: 85%;
+  font-weight: normal;
+  text-transform: uppercase;
+  margin-left: 0.375em;
 }
-
-.leaflet-popup-close-button {
-    background: none repeat scroll 0 0 rgba(0, 0, 0, 0);
-    border: medium none;
-    box-shadow: none;
-    color: #FFFFFF;
-    float: right;
-    margin-right: 1em;
-    margin-top: 1em;
-    position: static;
-}
-.leaflet-popup-close-button:hover {
-    color: #444444;
-}
-
-a.leaflet-popup-close-buttonn {
-    background: none repeat scroll 0 0 #FFFFFF;
-    border: 0 none;
-    border-radius: 50% 50% 50% 50%;
-    box-shadow: 0 0 0 2px #EEEEEE, -3px 3px 0 2px rgba(85, 85, 85, 0.5);
-    float: right;
-    height: 24px;
-    left: auto;
-    margin-right: -12px;
-    overflow: hidden;
-    padding: 0;
-    position: relative;
-    right: 100%;
+ a.leaflet-popup-close-button {
+    background: #fff;
     text-align: left;
     text-indent: -9999px;
-    top: -12px;
+    float: right;
+    height: 24px;
     width: 24px;
+    position: relative;
     z-index: 5;
-}
-a.leaflet-popup-close-button:before, a.leaflet-popup-close-button:after {
-    background: none repeat scroll 0 0 #46B8DA;
-    bottom: 50%;
-    content: " ";
+    top: -12px;
+    right: 100%;
+    left: auto;
+    padding: 0;
+    margin-right: -12px;
+    border: 0;
+    -webkit-border-radius: 50%;
+       -moz-border-radius: 50%;
+            border-radius: 50%;
+    overflow: hidden;
+    -webkit-box-shadow: 0 0 0 2px #eee, -3px 3px 0 2px rgba(85, 85, 85, 0.5);
+       -moz-box-shadow: 0 0 0 2px #eee, -3px 3px 0 2px rgba(85, 85, 85, 0.5);
+            box-shadow: 0 0 0 2px #eee, -3px 3px 0 2px rgba(85, 85, 85, 0.5);
+  }
+  a.leaflet-popup-close-button:before,
+  a.leaflet-popup-close-button:after {
+    content: "\0020";
+    position: absolute;
     display: block;
+    top: 50%;
+    right: 20%;
+    bottom: 50%;
     left: 20%;
     margin: -2px;
-    position: absolute;
-    right: 20%;
-    top: 50%;
-}
-a.leaflet-popup-close-button:hover:before, a.leaflet-popup-close-button:hover:after {
-    background: none repeat scroll 0 0 #DD3C77;
-}
-a.leaflet-popup-close-button {
-    transform: rotate(45deg);
-}
-a.leaflet-popup-close-button:after {
-    transform: rotate(90deg);
-}
+    background: #46B8DA;
+  }
+  a.leaflet-popup-close-button:hover:before, a.leaflet-popup-close-button:hover:after {
+    background: #428BCA;
+  }
+  #site-header a,
+  #site-header button,
+  .leaflet-popup-close-button {
+    -webkit-transition: color,background-color 0.1s;
+    -moz-transition: color,background-color 0.1s;
+    -o-transition: color,background-color 0.1s;
+    -ms-transition: color,background-color 0.1s;
+    transition: color,background-color 0.1s;
+  }
+  a.leaflet-popup-close-button {
+    -webkit-transform:rotate(45deg); /* Safari and Chrome */
+       -moz-transform:rotate(45deg); /* Firefox */
+        -ms-transform:rotate(45deg); /* IE 9 */
+         -o-transform:rotate(45deg); /* Opera */
+           transform: rotate(45deg);
+  }
+  a.leaflet-popup-close-button:after {
+    -webkit-transform:rotate(90deg); /* Safari and Chrome */
+       -moz-transform:rotate(90deg); /* Firefox */
+        -ms-transform:rotate(90deg); /* IE 9 */
+         -o-transform:rotate(90deg); /* Opera */
+           transform: rotate(90deg);
+  }
 
-.leaflet-popup-close-button {
-    transition: color 0s ease 0s, background-color 0.1s ease 0s;
-}
-
-a.leaflet-popup-close-button {
-    color: #46B8DA;
-    display: inline-block;
-    font-size: 1em;
-    font-weight: bold;
-    left: 0.25em;
-    line-height: 2;
-    padding: 0.75em;
-    position: relative;
-    text-decoration: none;
-    top: 0.75em;
-    z-index: 2;
-}
-a.leaflet-popup-close-button:hover {
-    color: #DD3C77;
-}
-a.leaflet-popup-close-button span {
-    font-size: 85%;
-    font-weight: normal;
-    margin-left: 0.375em;
-    text-transform: uppercase;
-}
-.leaflet-popup-close-button {
-    background: none repeat scroll 0 0 rgba(0, 0, 0, 0);
-    border: medium none;
-    box-shadow: none;
-    color: #FFFFFF;
-    float: right;
-    margin-right: 1em;
-    margin-top: 1em;
-    position: static;
-}
-.leaflet-popup-close-button:hover {
-    color: #444444;
-}
-	/*position: absolute;
-	top: 0;
-	right: 0;
-	padding: 4px 4px 0 0;
-	text-align: center;
-	width: 18px;
-	height: 14px;
-	font: 16px/14px Tahoma, Verdana, sans-serif;
-	color: #428bca;
-	text-decoration: none;
-	font-weight: bold;
-	background: transparent;*/
 .leaflet-container a.leaflet-popup-close-button:hover {
-	color: #46B8DA;
+	color: #428BCA;
 	}
 .leaflet-popup-scrolled {
 	overflow: auto;
@@ -567,49 +525,7 @@ a.leaflet-popup-close-button span {
 	border-top: 1px solid #ddd;
 	}
 
-a.leaflet-popup-close-button {
-    background: none repeat scroll 0 0 #FFFFFF;
-    border: 0 none;
-    border-radius: 50% 50% 50% 50%;
-    box-shadow: 0 0 0 2px #EEEEEE, -3px 3px 0 2px rgba(85, 85, 85, 0.5);
-    float: right;
-    height: 24px;
-    left: auto;
-    margin-right: -12px;
-    overflow: hidden;
-    padding: 0;
-    position: relative;
-    right: 100%;
-    text-align: left;
-    text-indent: -9999px;
-    top: -12px;
-    width: 24px;
-    z-index: 5;
-}
-a.leaflet-popup-close-button:before, a.leaflet-popup-close-button:after {
-    background: none repeat scroll 0 0 #46B8DA;
-    bottom: 50%;
-    content: " ";
-    display: block;
-    left: 20%;
-    margin: -2px;
-    position: absolute;
-    right: 20%;
-    top: 50%;
-}
-a.leaflet-popup-close-button:hover:before, a.leaflet-popup-close-button:hover:after {
-    background: none repeat scroll 0 0 #357EBD;
-}
-a.leaflet-popup-close-button {
-    transform: rotate(45deg);
-}
-a.leaflet-popup-close-button:after {
-    transform: rotate(90deg);
-}
 
-.leaflet-popup-close-button {
-    transition: color 0s ease 0s, background-color 0.1s ease 0s;
-}
 /* div icon */
 
 .leaflet-div-icon {
