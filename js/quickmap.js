@@ -16,7 +16,7 @@ var QuickMap = {
   title:"Quick Map",
   identifyConfig:{
     "service":"bc_parcels",
-    "layers":[{
+    layers:[{
       "layerindex":0,
       "layerlabel":"Parcels",
       fields:[{
@@ -141,6 +141,7 @@ var QuickMap = {
     var jsonlRecsObj = []; //declare object
     var jsonlFeildsObj = []; //declare object    
     QuickMap.setTotalRecs(somedata.results.length);
+   
 
     for(var layerIdx=0;layerIdx<QuickMap.identifyConfig.layers.length;layerIdx++){
 
@@ -161,27 +162,23 @@ var QuickMap = {
         features:jsonlRecsObj})
       jsonlRecsObj = []
     }
-
-
-       popupContentText = '';
-       popupHeaderText = '';
-
+    
+    popupContentText = '';
+    popupHeaderText = '';
 
        for(var i=0;i<jsonLayerObj.length;i++){
         popupContentText += '<div ><h4>'+jsonLayerObj[i].layername+'</h4></div>'
-        reccnt=0
-        for(var f=0;f<jsonLayerObj[i].features.length;f++){         
+        reccnt=0;
+        for(var f=0;f<jsonLayerObj[i].features.length;f++){
           for(var a=0;a<jsonLayerObj[i].features[f].attributes.length;a++){            
             name=jsonLayerObj[i].features[f].attributes[a].fieldname;
             val=jsonLayerObj[i].features[f].attributes[a].fieldvalue;
             style=jsonLayerObj[i].features[f].attributes[a].fieldstyle;
-            if(val){
-              reccnt+=1
+            if(val){              
               if(a==0){
+                    reccnt+=1;
                     popupContentText += '<div class="media"><a class="pull-left" href="#"><button type="button" class="btn  btn-info">'+reccnt+'</button></a><div class="media-body">'
-              }
-
-             
+              }             
               switch(style){
                 case'key':
                   popupContentText += '<span><b>'+name+':&nbsp</b></span>'
@@ -204,16 +201,19 @@ var QuickMap = {
                   break;                    
                 default:
                   popupContentText += '<span><b>'+name+':&nbsp</b></span>'
-                  popupContentText += val+'</span><br/>'
+                  popupContentText += val+'</span>'
                   break;
               }
 
               
               if(a==jsonLayerObj[i].features[f].attributes.length-1){
-                popupContentText += '</div></div>'
+                popupContentText += '</div>'
+                //popupContentText += '<div class="att-divider"></div>'
               }
+
             }
           }
+
         }
        }
 
