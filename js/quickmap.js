@@ -94,7 +94,11 @@ var QuickMap = {
            crossDomain: true,
            success:function(data){
             
-            selectBox += '<div class="bs-example">'
+            if (screen.width <= 800) {
+              selectBox += '<label class="text-info" for="mapsearch">Choose the '+QuickMap.dataMapConfig.fields[0].fieldLabel+'</label>';
+              selectBox += '<select id="mapsearch" class="form-control input-sm text-info"  onchange="QuickMap.zoomMap(this.value,16,false)" >';
+            }
+
             for(var dataIdx=0;dataIdx<data.features.length;dataIdx++ ){
               
                xStr=data.features[dataIdx].geometry.x;
@@ -105,9 +109,20 @@ var QuickMap = {
                label=data.features[dataIdx].attributes[QuickMap.dataMapConfig.fields[0].fieldName]
                len=label.length;
 
-               selectBox += '<div><button  class="btn btn-default btn-sm zmlayer" value=\''+ value  + '\'  onclick="QuickMap.zoomMap(this.value,16,false)" >'+label+'</button><div>';
+                if (screen.width <= 800) {
+                  selectBox +=  '<option value=\''+ value  + '\' class="input-sm text-info" >'+ label+ '</option>';
+                }else{
+                  selectBox += '<div><button  class="btn btn-default btn-sm zmlayer" value=\''+ value  + '\'  onclick="QuickMap.zoomMap(this.value,16,false)" >'+label+'</button><div>';
+               }
             }
-            selectBox += '</div>';
+            
+
+            if (screen.width <= 800) {
+                 selectBox += '</select>';
+            }else{
+              selectBox += '</div>';
+            }
+
              $('#results').append(selectBox);
            },
            error:function(x,t,m){console.log('fail');}
