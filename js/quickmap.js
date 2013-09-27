@@ -105,7 +105,7 @@ var QuickMap = {
                label=data.features[dataIdx].attributes[QuickMap.dataMapConfig.fields[0].fieldName]
                len=label.length;
 
-               selectBox += '<span><button  class="btn btn-default btn-sm zmlayer" value=\''+ value  + '\'  onclick="QuickMap.zoomMap(this.value,16,false)" >'+label+'</button><span>';
+               selectBox += '<div><button  class="btn btn-default btn-sm zmlayer" value=\''+ value  + '\'  onclick="QuickMap.zoomMap(this.value,16,false)" >'+label+'</button><div>';
             }
             selectBox += '</div>';
              $('#results').append(selectBox);
