@@ -223,6 +223,7 @@ var QuickMap = {
         minWidth: 200,
         maxHeight: 250,
         minHeight: 50,
+        closeOnClick:true,
       });
 
       popup.setLatLng(eventData.latlng);
