@@ -145,16 +145,14 @@ var QuickMap = {
                     if(QuickMap.dataMapConfig.fields[f].type=='key'){
                       label=data.features[dataIdx].attributes[QuickMap.dataMapConfig.fields[f].fieldName];
                       len=label.length;
-                      for(var dlim=0;len<200;dlim++){
-                        label='&nbsp;'+label+'&nbsp;';
-                        len=label.length+1;
-                      }
+           
 
                     }
                     if(QuickMap.dataMapConfig.fields[f].type=='display'){
                       for(var v=0;v<QuickMap.dataMapConfig.fields[f].values.length;v++){
                         if(QuickMap.dataMapConfig.fields[f].values[v].value==data.features[dataIdx].attributes[QuickMap.dataMapConfig.fields[f].fieldName]){
-                          selectBox += '<div><button  class="btn btn-default btn-sm zmlayer" style="font-weight:bold;color:'+QuickMap.dataMapConfig.fields[f].values[v].background+';" value=\''+ value  + '\' '+
+                          label+='&nbsp;-&nbsp;'+data.features[dataIdx].attributes[QuickMap.dataMapConfig.fields[f].fieldName]                        
+                          selectBox += '<div><button  class="btn btn-default btn-xs zmlayer" style="font-weight:bold;background-color:'+QuickMap.dataMapConfig.fields[f].values[v].background+';" value=\''+ value  + '\' '+
                           ' onclick="QuickMap.zoomMap(this.value,16,false)" >'+label+'</button><div>';
                         }
                       }
