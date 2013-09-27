@@ -93,7 +93,7 @@ var QuickMap = {
           data: data,
            crossDomain: true,
            success:function(data){
-            
+            alert(screen.width)
             if (screen.width <= 800) {
               selectBox += '<label class="text-info" for="mapsearch">Choose the '+QuickMap.dataMapConfig.fields[0].fieldLabel+'</label>';
               selectBox += '<select id="mapsearch" class="form-control input-sm text-info"  onchange="QuickMap.zoomMap(this.value,16,false)" >';
