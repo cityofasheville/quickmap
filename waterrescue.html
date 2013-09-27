@@ -51,10 +51,11 @@
         float:left;
         width:10%;
         height: 90%;
-        background-color: #428BCA;
-        border-color: #428BCA;
-        color: #FFFFFF;
+        background-color: #F5F5F5;
+        border-color: #F5F5F5;
+        color: #333333;
         border-radius: 0px 0px 0px 0px;
+        overflow: scroll;
       }
       .bigtest {
         height: 10%;
@@ -68,6 +69,7 @@
       .panel{
         margin-bottom: 0px;
         border-radius: 0px 0px 0px 0px;
+        border: 0px;
       }
       .badge-info {
         color: #ffffff;
@@ -76,6 +78,10 @@
       }
       .zmlayer{
         margin:5px;
+      }
+      .panel-maptitle{
+        background-color: #2F4F4F;
+        color:#ffffff;
       }
       
     .leaflet-control-zoom-fullscreen { background-image: url(img/icon-fullscreen.png);z-index:99999 }
@@ -92,8 +98,8 @@
 
 
   <body data-twttr-rendered="true" background-color="#F0F0F0">  
-    <div class="panel panel-primary text-info">
-      <div  class="panel panel-heading text-info" id="resultsholder" >
+    <div class="panel panel-maptitle">
+      <div  class="panel panel-heading panel-maptitle" >
         <center><h2>Water Rescue Point's</h2></center>
       </div>
     </div>

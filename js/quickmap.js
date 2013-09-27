@@ -94,8 +94,6 @@ var QuickMap = {
            crossDomain: true,
            success:function(data){
             
-            //selectBox += '<label class="text-info" for="mapsearch"><h3>Choose the '+QuickMap.dataMapConfig.fields[0].fieldLabel+'</h3></label>';
-            //selectBox += '<select id="mapsearch" class="form-control input-sm text-info"  onchange="QuickMap.zoomMap(this.value,16,false)" >';
             selectBox += '<div class="bs-example">'
             for(var dataIdx=0;dataIdx<data.features.length;dataIdx++ ){
               
@@ -107,13 +105,7 @@ var QuickMap = {
                label=data.features[dataIdx].attributes[QuickMap.dataMapConfig.fields[0].fieldName]
                len=label.length;
 
-               //make Pulldown common mind width;
-               //for(i=len;i<100;i++){
-               // label+='&nbsp;';
-               //}
-
-               //selectBox +=  '<option value=\''+ value  + '\' class="input-lg" >'+ label+ '</option>';
-               selectBox += '<span><button  class="btn btn-info btn-sm zmlayer" value=\''+ value  + '\'  onclick="QuickMap.zoomMap(this.value,16,false)" >'+label+'</button><span>';
+               selectBox += '<span><button  class="btn btn-default btn-sm zmlayer" value=\''+ value  + '\'  onclick="QuickMap.zoomMap(this.value,16,false)" >'+label+'</button><span>';
             }
             selectBox += '</div>';
              $('#results').append(selectBox);
