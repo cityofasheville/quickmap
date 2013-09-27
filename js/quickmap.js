@@ -93,8 +93,9 @@ var QuickMap = {
           data: data,
            crossDomain: true,
            success:function(data){
-            alert(screen.width)
-            if (screen.width <= 800) {
+            
+            if (screen.width <= 780) {
+
               selectBox += '<select id="mapsearch" class="form-control input-sm text-info"  onchange="QuickMap.zoomMap(this.value,16,false)" >';
             }
 
@@ -108,7 +109,7 @@ var QuickMap = {
                label=data.features[dataIdx].attributes[QuickMap.dataMapConfig.fields[0].fieldName]
                len=label.length;
 
-                if (screen.width <= 800) {
+                if (screen.width <= 780) {
                   selectBox +=  '<option value=\''+ value  + '\' class="input-sm text-info" >'+ label+ '</option>';
                 }else{
                   selectBox += '<div><button  class="btn btn-default btn-sm zmlayer" value=\''+ value  + '\'  onclick="QuickMap.zoomMap(this.value,16,false)" >'+label+'</button><div>';
@@ -116,7 +117,7 @@ var QuickMap = {
             }
             
 
-            if (screen.width <= 800) {
+            if (screen.width <= 780) {
                  selectBox += '</select>';
             }else{
               selectBox += '</div>';
