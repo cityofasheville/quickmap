@@ -135,38 +135,27 @@ var QuickMap = {
                
                
                var label='';
-               len=label.length;
+               
 
                 if (screen.width <= 780) {
                   selectBox +=  '<option value=\''+ value  + '\' class="input-sm text-info" >'+ label+ '</option>';
                 }else{
                   for (var f=0;f<QuickMap.dataMapConfig.fields.length;f++){
-                    // selectBox += '<br/>'
-                    // selectBox += QuickMap.dataMapConfig.fields[f].type+'1'
-                    // selectBox += '<br/>'
-                    // selectBox += QuickMap.dataMapConfig.fields[f].fieldName+'2'
-                    // selectBox += '<br/>'
-                    // selectBox += QuickMap.dataMapConfig.fields[f].fieldLabel+'3'
 
                     if(QuickMap.dataMapConfig.fields[f].type=='key'){
                       label=data.features[dataIdx].attributes[QuickMap.dataMapConfig.fields[f].fieldName];
+                      len=label.length;
+                      for(var dlim=0;len<200;dlim++){
+                        label='&nbsp;'+label+'&nbsp;';
+                        len=label.length+1;
+                      }
+
                     }
                     if(QuickMap.dataMapConfig.fields[f].type=='display'){
-                      // selectBox += '<br/>'
-                      // selectBox += QuickMap.dataMapConfig.fields[f].values.length
-
                       for(var v=0;v<QuickMap.dataMapConfig.fields[f].values.length;v++){
-                        // selectBox += '<br/>'
-                        // selectBox += label
-                        // selectBox += '<br/>'
-                        // selectBox += data.features[dataIdx].attributes[QuickMap.dataMapConfig.fields[f].fieldName];
-                        // selectBox += '<br/>'
-                        // selectBox += QuickMap.dataMapConfig.fields[f].values[v].value
-                        // selectBox += '<br/>'
-                        // selectBox += QuickMap.dataMapConfig.fields[f].values[v].background
-
                         if(QuickMap.dataMapConfig.fields[f].values[v].value==data.features[dataIdx].attributes[QuickMap.dataMapConfig.fields[f].fieldName]){
-                          selectBox += '<div><button  class="btn btn-default btn-sm zmlayer" style="background-color:'+QuickMap.dataMapConfig.fields[f].values[v].background+';" value=\''+ value  + '\'  onclick="QuickMap.zoomMap(this.value,16,false)" >'+label+'</button><div>';
+                          selectBox += '<div><button  class="btn btn-default btn-sm zmlayer" style="font-weight:bold;color:'+QuickMap.dataMapConfig.fields[f].values[v].background+';" value=\''+ value  + '\' '+
+                          ' onclick="QuickMap.zoomMap(this.value,16,false)" >'+label+'</button><div>';
                         }
                       }
                     }
