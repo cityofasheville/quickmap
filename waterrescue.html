@@ -12,12 +12,12 @@
     <link href="css/bootstrap.min.css" rel="stylesheet">
     <style type="text/css">
       body {
-        padding-top: 5px; /* 60px to make the container go all the way to the bottom of the topbar */
+        padding-top: 0px; /* 60px to make the container go all the way to the bottom of the topbar */
       }
     </style>
 
-    <script type="text/javascript" src="http://cdn.leafletjs.com/leaflet-0.6.4/leaflet.js"></script>
-    <link rel="stylesheet" href="http://cdn.leafletjs.com/leaflet-0.6.4/leaflet.css" />
+    <script type="text/javascript" src="js/leaflet.js"></script>
+    <link rel="stylesheet" href="css/leaflet.css" />
     <!--[if lte IE 8]>
      <link rel="stylesheet" href="http://cdn.leafletjs.com/leaflet-0.6.4/leaflet.ie.css" />
     <![endif]-->    <!-- <style type="text/javascript">#map { height: 180px; }</style> -->
@@ -57,11 +57,16 @@
       .record_list.deactive {
         display:none;
       }
-
+      .panel{
+        margin-bottom: 0px;
+      }
       .badge-info {
         color: #ffffff;
         background-color: #428bca;
         border-color: #357ebd;
+      }
+      .zmlayer{
+        margin:5px;
       }
       
     .leaflet-control-zoom-fullscreen { background-image: url(img/icon-fullscreen.png);z-index:99999 }
@@ -79,24 +84,15 @@
 
   <body data-twttr-rendered="true" background-color="#F0F0F0">
     
-    <div class="panel text-info bigtest">
+    <div class="panel panel-primary text-info bigtest">
       <div  class="panel panel-heading text-info" id="resultsholder" >
-        <label class="text-info" for="txtSearch"></label>
-        <div class="input-group input-group-lg">
-          <span id="results" class="text-info" ></span>
-          <!-- <input type="text" class="form-control input-lg" id="txtSearch" placeholder="Search Address" > 
-          <span class="input-group-btn">
-            <button class="btn btn-info btn-lg" type="button" id="search">Search</button>
-          </span> -->
-        </div>
-       <span id="results"></span>
+       <h3>Go to a Water Rescue Location!</h3>
+        <span id="results"></span>
       </div>
-      <div class="panel panel-body mapdiv">
-        <div class="panel" id="map"></div> <!-- This one wants to be 100% height -->
-      </div>
+      <div id="map"></div>
   </div>
 
-</div> -->
+</div> 
 
 
 <script>
