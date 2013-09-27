@@ -58,6 +58,27 @@ var QuickMap = {
     "fields":[{
       "fieldName":"label",
       "fieldLabel":"Water Resuce Point",
+      "type":"key",
+    },{
+      "fieldName":"access_cond",
+      "fieldLabel":"Water Resuce Point",
+      "type":"display",
+      values:[{
+        "value":"Excellent",
+        "background":"#006100",
+      },{
+        "value":"Good",
+        "background":"#7AAB00",
+      },{
+        "value":"Fair",
+        "background":"#FFFF00",
+      },{
+        "value":"Poor",
+        "background":"#FF9900",
+      },{
+        "value":"Out of Service",
+        "background":"#A80000",
+      }]
     }],
   },
   dataDriveMap:false,
@@ -84,8 +105,13 @@ var QuickMap = {
     for(var idx=0;idx<somedata.fields.length;idx++){
       if(somedata.fields[idx].name == QuickMap.dataMapConfig.fields[0].fieldName ){
         //alert(somedata.fields[idx].name)
+        flds='';
+        for (var i=0;i<QuickMap.dataMapConfig.fields.length;i++){
+          flds+=QuickMap.dataMapConfig.fields[i].fieldName+',';
+        }
+        flds+=flds.substring(0,flds.length-1);
         var urlStr = 'http://'+QuickMap.dataMapConfig.agsServerName+'/'+QuickMap.dataMapConfig.agsServerInstanceName+'/rest/services/'+QuickMap.dataMapConfig.agsServerFolderName+'/'+QuickMap.dataMapConfig.agsServicename+'/MapServer/0/query'
-        var data={f:"json",outSR:4326,where:"objectid>0",outFields:QuickMap.dataMapConfig.fields[0].fieldName}
+        var data={f:"json",outSR:4326,where:"objectid>0",outFields:flds}
         var selectBox='';
           $.ajax({
           url: urlStr,
@@ -106,13 +132,45 @@ var QuickMap = {
                geom={geometries: [{x:xStr,y:yStr}]};
                value=JSON.stringify(geom);
                
-               label=data.features[dataIdx].attributes[QuickMap.dataMapConfig.fields[0].fieldName]
+               
+               
+               var label='';
                len=label.length;
 
                 if (screen.width <= 780) {
                   selectBox +=  '<option value=\''+ value  + '\' class="input-sm text-info" >'+ label+ '</option>';
                 }else{
-                  selectBox += '<div><button  class="btn btn-default btn-sm zmlayer" value=\''+ value  + '\'  onclick="QuickMap.zoomMap(this.value,16,false)" >'+label+'</button><div>';
+                  for (var f=0;f<QuickMap.dataMapConfig.fields.length;f++){
+                    // selectBox += '<br/>'
+                    // selectBox += QuickMap.dataMapConfig.fields[f].type+'1'
+                    // selectBox += '<br/>'
+                    // selectBox += QuickMap.dataMapConfig.fields[f].fieldName+'2'
+                    // selectBox += '<br/>'
+                    // selectBox += QuickMap.dataMapConfig.fields[f].fieldLabel+'3'
+
+                    if(QuickMap.dataMapConfig.fields[f].type=='key'){
+                      label=data.features[dataIdx].attributes[QuickMap.dataMapConfig.fields[f].fieldName];
+                    }
+                    if(QuickMap.dataMapConfig.fields[f].type=='display'){
+                      // selectBox += '<br/>'
+                      // selectBox += QuickMap.dataMapConfig.fields[f].values.length
+
+                      for(var v=0;v<QuickMap.dataMapConfig.fields[f].values.length;v++){
+                        // selectBox += '<br/>'
+                        // selectBox += label
+                        // selectBox += '<br/>'
+                        // selectBox += data.features[dataIdx].attributes[QuickMap.dataMapConfig.fields[f].fieldName];
+                        // selectBox += '<br/>'
+                        // selectBox += QuickMap.dataMapConfig.fields[f].values[v].value
+                        // selectBox += '<br/>'
+                        // selectBox += QuickMap.dataMapConfig.fields[f].values[v].background
+
+                        if(QuickMap.dataMapConfig.fields[f].values[v].value==data.features[dataIdx].attributes[QuickMap.dataMapConfig.fields[f].fieldName]){
+                          selectBox += '<div><button  class="btn btn-default btn-sm zmlayer" style="background-color:'+QuickMap.dataMapConfig.fields[f].values[v].background+';" value=\''+ value  + '\'  onclick="QuickMap.zoomMap(this.value,16,false)" >'+label+'</button><div>';
+                        }
+                      }
+                    }
+                  }
                }
             }
             
