@@ -38,18 +38,26 @@
      
 
     <style type="text/css">
-      #map,body,html { 
+      body,html { 
         height: 100%;
         width:  100%;
       }
-      #resultsholder{
+      #map{
+        float: right;
+        height: 90%;
+        width:  90%;
       }
-      .mapdiv {
-        height: 80%;
-        width: 100%;
+      .sidepanel{
+        float:left;
+        width:10%;
+        height: 90%;
+        background-color: #428BCA;
+        border-color: #428BCA;
+        color: #FFFFFF;
+        border-radius: 0px 0px 0px 0px;
       }
       .bigtest {
-        height: 100%;
+        height: 10%;
       }
       .fl{float:right;}
       .ui-autocomplete { position: absolute; cursor: default;z-index:9999 !important;}
@@ -59,6 +67,7 @@
       }
       .panel{
         margin-bottom: 0px;
+        border-radius: 0px 0px 0px 0px;
       }
       .badge-info {
         color: #ffffff;
@@ -82,15 +91,14 @@
   </head>
 
 
-  <body data-twttr-rendered="true" background-color="#F0F0F0">
-    
-    <div class="panel panel-primary text-info bigtest">
+  <body data-twttr-rendered="true" background-color="#F0F0F0">  
+    <div class="panel panel-primary text-info">
       <div  class="panel panel-heading text-info" id="resultsholder" >
-       <h3>Go to a Water Rescue Location!</h3>
-        <span id="results"></span>
+        <center><h2>Water Rescue Point's</h2></center>
       </div>
-      <div id="map"></div>
-  </div>
+    </div>
+    <div id="results" class="sidepanel"></div>
+    <div id="map"></div>
 
 </div> 
 
