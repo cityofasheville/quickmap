@@ -13,100 +13,236 @@ var QuickMap = {
   mySRID:2264, //your projection id
   currentRec:0,
   totalRecs:0,
-  identifyLayers:{
-    "layerIndex":0,
-    fields:[{
+  title:"Quick Map",
+  identifyConfig:{
+    "service":"bc_parcels",
+    layers:[{
+      "layerindex":0,
+      "layerlabel":"Parcels",
+      fields:[{
+          "id":0,
+          "name":"pinnum",
+          "style":"key", 
+          "label":"PIN"
+        },
+        {
+          "id":1,
+          "name":"owner",
+          "style":"text", 
+          "label":"Owner"
+        }],
+      },
+      {
+      "layerindex":1,
+      "layerlabel":"Zoning",
+      fields:[{
         "id":0,
-        "name":"pinnum",
+        "name":"districts",
         "style":"key", //key,text,url,num
-        "label":"PIN"
+        "label":"Zonning District"
+      },
+      {
+        "id":1,
+        "name":"Acreage",
+        "style":"text", //key,text,url,num
+        "label":"Acreage"
       }],
+    }],
   },
-  setIdentifyLayers:function(val){QuickMap.identifyLayers=val},
+  dataMapConfig:{
+    "agsServerName":"gis.ashevillenc.gov",
+    "agsServerInstanceName":"COA_ArcGIS_Server",
+    "agsServerFolderName":"OpenDataAsheville",
+    "agsServicename":"coa_water_rescue_points",
+    "agsLayerIndex":0,
+    "fields":[{
+      "fieldName":"label",
+      "fieldLabel":"Water Resuce Point",
+    }],
+  },
+  dataDriveMap:false,
+  //setdataDriveMap:function(val){}},
+  getlist:function(){
+    if(QuickMap.dataDriveMap){
+      
+      var urlStr = 'http://'+QuickMap.dataMapConfig.agsServerName+'/'+QuickMap.dataMapConfig.agsServerInstanceName+'/rest/services/'+QuickMap.dataMapConfig.agsServerFolderName+'/'+QuickMap.dataMapConfig.agsServicename+'/MapServer/'+QuickMap.dataMapConfig.agsLayerIndex;      
+      var data={f:"json"};
+
+       $.ajax({
+          url: urlStr,
+          dataType: "jsonp",
+          data: data,
+           crossDomain: true,
+           success:function(data){QuickMap.buildList(data);},
+           error:function(x,t,m){console.log('fail');}
+       });
+      
+    };
+  },
+  buildList:function(somedata){
+    //alert(somedata.fields.length);
+    for(var idx=0;idx<somedata.fields.length;idx++){
+      if(somedata.fields[idx].name == QuickMap.dataMapConfig.fields[0].fieldName ){
+        //alert(somedata.fields[idx].name)
+        var urlStr = 'http://'+QuickMap.dataMapConfig.agsServerName+'/'+QuickMap.dataMapConfig.agsServerInstanceName+'/rest/services/'+QuickMap.dataMapConfig.agsServerFolderName+'/'+QuickMap.dataMapConfig.agsServicename+'/MapServer/0/query'
+        var data={f:"json",outSR:4326,where:"objectid>0",outFields:QuickMap.dataMapConfig.fields[0].fieldName}
+        var selectBox='';
+          $.ajax({
+          url: urlStr,
+          dataType: "jsonp",
+          data: data,
+           crossDomain: true,
+           success:function(data){ 
+            
+            if (screen.width <= 780) {
+
+              selectBox += '<select id="mapsearch" class="form-control input-sm text-info"  onchange="QuickMap.zoomMap(this.value,16,false)" >';
+            }
+
+            for(var dataIdx=0;dataIdx<data.features.length;dataIdx++ ){
+              
+               xStr=data.features[dataIdx].geometry.x;
+               yStr=data.features[dataIdx].geometry.y;
+               geom={geometries: [{x:xStr,y:yStr}]};
+               value=JSON.stringify(geom);
+               
+               label=data.features[dataIdx].attributes[QuickMap.dataMapConfig.fields[0].fieldName]
+               len=label.length;
+
+                if (screen.width <= 780) {
+                  selectBox +=  '<option value=\''+ value  + '\' class="input-sm text-info" >'+ label+ '</option>';
+                }else{
+                  selectBox += '<div><button  class="btn btn-default btn-sm zmlayer" value=\''+ value  + '\'  onclick="QuickMap.zoomMap(this.value,16,false)" >'+label+'</button><div>';
+               }
+            }
+            
+
+            if (screen.width <= 780) {
+                 selectBox += '</select>';
+            }else{
+              selectBox += '</div>';
+            }
+
+             $('#results').append(selectBox);
+           },
+           error:function(x,t,m){console.log('fail');}
+       });
+      }
+    }
+  },
+  setIdentifyConfig:function(val){QuickMap.identifyConfig=val},
   setTotalRecs:function(val){QuickMap.totalRecs=val;},
   setCurrentRec:function(val){QuickMap.currentRec=val;},
-  zoomMap :function(data){
-    xStr=data.geometries[0].x;
-    yStr=data.geometries[0].y;
-    map.setView(new L.LatLng(yStr, xStr), 17);
+  zoomMap :function(data,zlevel,isDrawPts){
+
+    if(typeof(data) =='string'){var obj = JSON.parse(data);}else{var obj = data}
+    
+    xStr=obj.geometries[0].x;
+    yStr=obj.geometries[0].y;
+    map.setView(new L.LatLng(yStr, xStr), zlevel);
     var startPt = '[{"type": "Point","coordinates":['+xStr+','+yStr+']}]';
-    QuickMap.drawPoints(startPt);
+    if(isDrawPts){QuickMap.drawPoints(startPt);}
     return '';
   },
   retLayerInfo:function(somedata,eventData){
-      if(somedata.results.length > 0) {
-            QuickMap.setTotalRecs(somedata.results.length);
-            popupContentText = '';
-            popupHeaderText = '';
-            popupHeaderText = '<h4>Found '+QuickMap.totalRecs+' records!</h4>'
+    var jsonLayerObj = []; //declare object
+    var jsonlRecsObj = []; //declare object
+    var jsonlFeildsObj = []; //declare object    
+    QuickMap.setTotalRecs(somedata.results.length);
+   
 
-             
-             if(QuickMap.totalRecs > 1) {
-                popupHeaderText += '<select class="form-control input-sm text-info"  onchange="QuickMap.toggleRec('+QuickMap.totalRecs+',this.value)" >'
-                for (var dataIdx=0;dataIdx<QuickMap.totalRecs;dataIdx++ ) {
-                  for (var displayIDX=0;displayIDX<QuickMap.identifyLayers.fields.length;displayIDX++ ){
-                    if(QuickMap.identifyLayers.fields[displayIDX].style == 'key'){
-                      popupHeaderText +=  '<option value="'+dataIdx+'" class="input-sm text-info" >'+somedata.results[dataIdx].attributes[QuickMap.identifyLayers.fields[displayIDX].name]  + '</option>';
-                    }
-                  }
-                }
-                popupHeaderText += '</select>';
-              }                
+    for(var layerIdx=0;layerIdx<QuickMap.identifyConfig.layers.length;layerIdx++){
 
+      for (var dataIdx=0;dataIdx<QuickMap.totalRecs;dataIdx++ ) {  
+          
+          for (var displayIDX=0;displayIDX<QuickMap.identifyConfig.layers[layerIdx].fields.length;displayIDX++ ){
 
-            for (var dataIdx=0;dataIdx<QuickMap.totalRecs;dataIdx++ ) {
-              tActive='';
-              if(dataIdx==0){tActive=' active'}else{tActive=' deactive'};
-              popupContentText += '<div id="results'+dataIdx+'" class="record_list'+tActive+'" >';  
-              for (var displayIDX=0;displayIDX<QuickMap.identifyLayers.fields.length;displayIDX++ ){
-                switch(QuickMap.identifyLayers.fields[displayIDX].style){
-                  case "key":
-                    popupContentText += '<div><b>'+QuickMap.identifyLayers.fields[displayIDX].label+': </b>' + 
-                                        somedata.results[dataIdx].attributes[QuickMap.identifyLayers.fields[displayIDX].name] + '</div>';
-                    break;
-                  case "text":
-                    popupContentText += '<div><b>'+QuickMap.identifyLayers.fields[displayIDX].label+': </b>' + 
-                                        somedata.results[dataIdx].attributes[QuickMap.identifyLayers.fields[displayIDX].name] + '</div>';
-                    break;
-                  case "url":
-                    popupContentText += '<div ><a href="' + somedata.results[dataIdx].attributes[QuickMap.identifyLayers.fields[displayIDX].name]  + '" target="_blank" >' +
-                                        QuickMap.identifyLayers.fields[displayIDX].label+'</a></div>';
-                    break;
-                  case "number":
-                    popupContentText += '<div ><b>'+QuickMap.identifyLayers.fields[displayIDX].label+': </b>' + 
-                                        somedata.results[dataIdx].attributes[QuickMap.identifyLayers.fields[displayIDX].name] + '</div>';
-                    break;
-                  case "currency":
-                    popupContentText += '<div ><b>'+QuickMap.identifyLayers.fields[displayIDX].label+': </b>' + 
-                                        '$'+parseInt(somedata.results[dataIdx].attributes[QuickMap.identifyLayers.fields[displayIDX].name]).toFixed(2) + '</div>';
-                    break;
-                  default: 
-                     popupContentText += '<div><b>'+QuickMap.identifyLayers.fields[displayIDX].label+': </b>' + 
-                                        somedata.results[dataIdx].attributes[QuickMap.identifyLayers.fields[displayIDX].name] + '</div>';
-                    break;
-               };                
+            jsonlFeildsObj.push({fieldname:QuickMap.identifyConfig.layers[layerIdx].fields[displayIDX].label,
+              fieldstyle:QuickMap.identifyConfig.layers[layerIdx].fields[displayIDX].style,
+              fieldvalue:somedata.results[dataIdx].attributes[QuickMap.identifyConfig.layers[layerIdx].fields[displayIDX].name],});
+          }
+          jsonlRecsObj.push({recordnum:dataIdx,
+            attributes:jsonlFeildsObj})
+          jsonlFeildsObj = []
+      }
+      jsonLayerObj.push({layerid:QuickMap.identifyConfig.layers[layerIdx].layerindex,
+        layername:QuickMap.identifyConfig.layers[layerIdx].layerlabel,
+        features:jsonlRecsObj})
+      jsonlRecsObj = []
+    }
+    
+    popupContentText = '';
+    popupHeaderText = '';
+
+       for(var i=0;i<jsonLayerObj.length;i++){
+        popupContentText += '<div ><h4>'+jsonLayerObj[i].layername+'</h4></div>'
+        reccnt=0;
+        for(var f=0;f<jsonLayerObj[i].features.length;f++){
+          for(var a=0;a<jsonLayerObj[i].features[f].attributes.length;a++){            
+            name=jsonLayerObj[i].features[f].attributes[a].fieldname;
+            val=jsonLayerObj[i].features[f].attributes[a].fieldvalue;
+            style=jsonLayerObj[i].features[f].attributes[a].fieldstyle;
+            if(val){              
+              if(a==0){
+                    reccnt+=1;
+                    popupContentText += '<div class="media"><a class="pull-left" href="#"><button type="button" class="btn  btn-info">'+reccnt+'</button></a><div class="media-body">'
+              }             
+              switch(style){
+                case'key':
+                  popupContentText += '<span><b>'+name+':&nbsp</b></span>'
+                  popupContentText += '<b>'+val+'</b></span><br/>'
+                  break;
+                case'url':
+                  popupContentText += '<a href="'+val+'" target="_blank" >'+name+'</a></span><br/>'
+                  break;
+                case'text':
+                  popupContentText += '<span><b>'+name+':&nbsp</b></span>'
+                  popupContentText += val+'</span><br/>'
+                  break;
+                case'number':
+                  popupContentText += '<span><b>'+name+':&nbsp</b></span>'
+                  popupContentText += val+'</span><br/>'
+                  break;
+                case'currency':
+                  popupContentText += '<span><b>'+name+':&nbsp</b></span>'
+                  popupContentText += '$'+val+'</span><br/>'
+                  break;                    
+                default:
+                  popupContentText += '<span><b>'+name+':&nbsp</b></span>'
+                  popupContentText += val+'</span>'
+                  break;
               }
-              popupContentText += '</div>';
-            };
 
-           
+              
+              if(a==jsonLayerObj[i].features[f].attributes.length-1){
+                popupContentText += '</div>'
+                //popupContentText += '<div class="att-divider"></div>'
+              }
 
-            //Add Popup to the map when the mouse was clicked at
-             popup = new L.Popup({
-              maxWidth: 250,
-              maxHeight: 250,
-              minHeight: 50,
-            });
+            }
+          }
 
-            popup.setLatLng(eventData.latlng);
-            popup.setContent(popupHeaderText+popupContentText);
-            map.openPopup(popup);
         }
+       }
+
+      //Add Popup to the map when the mouse was clicked at
+       popup = new L.Popup({
+        maxWidth: 250,
+        minWidth: 200,
+        maxHeight: 250,
+        minHeight: 50,
+        closeOnClick:true,
+      });
+
+      popup.setLatLng(eventData.latlng);
+      popup.setContent(popupHeaderText+popupContentText);
+      map.openPopup(popup);
+        
   },
-  toggleRec:function(total,index){
-      QuickMap.setCurrentRec(index)
-       for (var i=0;i<total;i++ ) {$('#results'+i).hide();}
-      $('#results'+index).show();
+  toggleRec:function(total,index,type){
+    QuickMap.setCurrentRec(index)
+    for (var i=0;i<total;i++ ) {$('#'+type+i).hide();}
+    $('#'+type+index).show();
   },
   getStateplane:function(eventData){
     xStr = eventData.latlng.lng.toFixed(8);
@@ -126,18 +262,34 @@ var QuickMap = {
          error:function(x,t,m){console.log('fail');}//updateResultsFail(t,'Error with transforming to WGS84!')
      });
   },
+  getIdentifyLayerList:function(){
+    lyr='';
+    for(var layerIDX=0;layerIDX<QuickMap.identifyConfig.layers.length;layerIDX++){
+      lyr += QuickMap.identifyConfig.layers[layerIDX].layerindex;
+      lyr += ',';
+    };
+    ret=lyr.substring(0, lyr.length-1);
+    return ret
+  },
+  getIdentifyService:function(){
+    srv=QuickMap.identifyConfig.service;
+    ret=srv;
+    return ret
+  },
   getLayerInfo:function(somedata,eventData){
     xStr=somedata.geometries[0].x;
     yStr=somedata.geometries[0].y;
- 
+    lyrs='all:'+QuickMap.getIdentifyLayerList();
+
     aPt =  JSON.stringify( {"x":xStr,"y":yStr,"spatialReference":{"wkid":QuickMap.mySRID}}) 
     bbox = JSON.stringify(
       {
         "xmin":map.getBounds()._southWest.lng,"ymin":map.getBounds()._southWest.lat,"xmax":map.getBounds()._northEast.lng,"ymax":map.getBounds()._northEast.lat,"spatialReference":{"wkid":4326}
       })
- 
-    urlStr = 'http://'+QuickMap.agsServerGeocode+'/'+QuickMap.agsServerInstanceNameGeocode+'/rest/services/OpenDataAsheville/bc_parcels/MapServer/identify';
-    data={f:"json",sr:QuickMap.mySRID,layers:0,geometry:aPt,imageDisplay:"800,600,96",tolerance:3,mapExtent:bbox,geometryType:"esriGeometryPoint",returnGeometry:false};
+   
+    identifyService=QuickMap.getIdentifyService();
+    urlStr = 'http://'+QuickMap.agsServerGeocode+'/'+QuickMap.agsServerInstanceNameGeocode+'/rest/services/OpenDataAsheville/'+identifyService+'/MapServer/identify';
+    data={f:"json",sr:QuickMap.mySRID,layers:lyrs,geometry:aPt,imageDisplay:"800,600,96",tolerance:3,mapExtent:bbox,geometryType:"esriGeometryPoint",returnGeometry:false};
 
        $.ajax({
         url: urlStr,
@@ -164,7 +316,7 @@ var QuickMap = {
         dataType: "jsonp",
         data: data,
          crossDomain: true,
-         success:function(data){QuickMap.zoomMap(data);},
+         success:function(data){QuickMap.zoomMap(data,17,true);},
          error:function(x,t,m){console.log('fail');}//updateResultsFail(t,'Error with transforming to WGS84!')
      });
    },

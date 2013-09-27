@@ -3,17 +3,16 @@
 <html lang="en">
   <head>
     <meta charset="utf-8">
-    <title>City Map</title>
+    <title>Water Rescue Point's</title>
     <!-- <meta name="viewport" content="width=device-width, initial-scale=1.0">-->
     <meta name="description" content="">
     <meta name="author" content="">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
     <!-- Le styles -->
-
     <link href="css/bootstrap.min.css" rel="stylesheet">
     <style type="text/css">
       body {
-        padding-top: 5px; /* 60px to make the container go all the way to the bottom of the topbar */
+        padding-top: 0px; /* 60px to make the container go all the way to the bottom of the topbar */
       }
     </style>
 
@@ -39,18 +38,27 @@
      
 
     <style type="text/css">
-      #map,body,html { 
+      body,html { 
         height: 100%;
         width:  100%;
       }
-      #resultsholder{
+      #map{
+        float: right;
+        height: 90%;
+        width:  90%;
       }
-      .mapdiv {
-        height: 80%;
-        width: 100%;
+      .sidepanel{
+        float:left;
+        width:10%;
+        height: 90%;
+        background-color: #F5F5F5;
+        border-color: #F5F5F5;
+        color: #333333;
+        border-radius: 0px 0px 0px 0px;
+        overflow: scroll;
       }
       .bigtest {
-        height: 100%;
+        height: 10%;
       }
       .fl{float:right;}
       .ui-autocomplete { position: absolute; cursor: default;z-index:9999 !important;}
@@ -58,32 +66,42 @@
       .record_list.deactive {
         display:none;
       }
-      .layer_list.deactive {
-        display:none;
+      .panel{
+        margin-bottom: 0px;
+        border-radius: 0px 0px 0px 0px;
+        border: 0px;
       }
-      .field_list.deactive {
-        display:none;
-      }
-      .layerrec_list.deactive {
-        display:none;
-      }
-
-      .att-divider {
-          background-color: #428bca;
-          height: 1px;
-          overflow: hidden;
-          width: 80%;
-
-      }
-
       .badge-info {
         color: #ffffff;
         background-color: #428bca;
         border-color: #357ebd;
       }
+      .zmlayer{
+        margin:5px;
+      }
+      .panel-maptitle{
+        background-color: #2F4F4F;
+        color:#ffffff;
+      }
+      @media screen and (max-width: 780px){
+        .sidepanel{
+          width: 100%;
+          height:5%;
+          float:none;
+          background-color: #2F4F4F;
+          color:#ffffff;
+          overflow: hidden;
+        }
+        #map{
+          float:none;
+          width:100%;
+          height:85% 
+        }
+      }
 
+      }
 
-
+      
     .leaflet-control-zoom-fullscreen { background-image: url(img/icon-fullscreen.png);z-index:99999 }
     /* on selector per rule as explained here : http://www.sitepoint.com/html5-full-screen-api/ */
     #map:-webkit-full-screen { width: 100% !important; height: 100% !important; }
@@ -97,23 +115,17 @@
   </head>
 
 
-  <body data-twttr-rendered="true" background-color="#F0F0F0">
-    
-    <div class="panel text-info bigtest">
-      <div  class="panel panel-heading text-info" id="resultsholder" >
-        <label class="text-info" for="txtSearch"></label>
-        <div class="input-group input-group-lg">
-          <input type="text" class="form-control input-lg" id="txtSearch" placeholder="Search Address" > 
-          <span class="input-group-btn">
-            <button class="btn btn-info btn-lg" type="button" id="search">Search</button>
-          </span>
-        </div>
-       <span id="results"></span>
+  <body data-twttr-rendered="true" background-color="#F0F0F0">  
+    <div class="panel panel-maptitle">
+      <div  class="panel panel-heading panel-maptitle" >
+        <center><h2>Water Rescue Point's</h2></center>
       </div>
-      <div class="panel panel-body mapdiv">
-        <div class="panel" id="map"></div> <!-- This one wants to be 100% height -->
-      </div>
-  </div>
+    </div>
+    <div id="results" class="sidepanel"></div>
+    <div id="map"></div>
+
+</div> 
+
 
 <script>
   $(function () {
@@ -179,15 +191,6 @@
         var mapAttr = 'Map data from The City of Asheville , NC',
         mapUrl = 'http://gis.ashevillenc.gov/tiles/basemapbw/{z}/{x}/{y}.png';
 
-        var basemapclr = L.tileLayer(
-          mapUrl, 
-          {
-            maxZoom: 19,
-            minZoom: 11,
-            tms: true,
-            opacity:.25,
-            attribution:mapAttr,
-        });
 
         var basemapsld = L.tileLayer(
           mapUrl, 
@@ -198,37 +201,20 @@
             attribution:mapAttr,
         });
 
-        var parcel= L.tileLayer(
-          'http://gis.ashevillenc.gov/tiles/bcparcels/{z}/{x}/{y}.png', 
+       var wr= L.tileLayer(
+          'http://gis.ashevillenc.gov/tiles/waterrescue/{z}/{x}/{y}.png', 
           {
             maxZoom: 19,
-            minZoom: 16,
+            minZoom: 14,
             tms: true,
             attribution:mapAttr,
         });
-
-        var zoning= L.tileLayer(
-          'http://gis.ashevillenc.gov/tiles/coazoning/{z}/{x}/{y}.png', 
-          {
-            maxZoom: 19,
-            minZoom: 15,
-            tms: true,
-            attribution:mapAttr,
-        });
-
-
-        var img2010 = L.tileLayer.wms("http://services.nconemap.com/arcgis/services/Imagery/Orthoimagery_Latest/ImageServer/WMSServer?", {
-            layers: 'Orthoimagery_Latest',
-            format: 'image/png',
-            transparent: true,
-            attribution: "Imagery from - North Carolina Center for Geographic Information and Analysis"
-        })
 
        var map = new L.Map(
         'map', 
         {
           fullscreenControl: true,
-          layers: [basemapsld,parcel,zoning]
+          layers: [basemapsld,wr]
         }).setView([35.593,-82.5488], 14)
    
         map.on('fullscreenchange', function () {
@@ -242,23 +228,12 @@
 
 
 
-      var bmimg = L.layerGroup([img2010,basemapclr])
-
       var baseLayers = {
         "Street Map": basemapsld,
-        "Imagery":img2010,
-        "Street Map And Imagery":bmimg,
       };
 
-      var overlayLayers = {
-        "City of Asheville zoning": zoning,
-        "BC Parcels": parcel,
-      }
-
-
-      layersControl = new L.control.layers(baseLayers,overlayLayers,{collapsed: false});
-
-      layersControl.addTo(map);
+      QuickMap.dataDriveMap=true;
+      QuickMap.getlist();
 
       map.on('enterFullscreen', function(){
         if(window.console) window.console.log('enterFullscreen');
@@ -267,27 +242,10 @@
       map.on('exitFullscreen', function(){
         if(window.console) window.console.log('exitFullscreen');
       });
-
-      map.removeLayer(zoning);
-      map.removeLayer(parcel);
-      
-      layersControl._update(); 
-  
-      map.addEventListener('click', onMapClick);
-    
-      popup = new L.Popup({
-        maxWidth: 400,
-        zoomAnimation:true,
-        closeOnClick:true,
-      });
-
     
     
-    QuickMap.identifyConfig={
-    "service":"bc_parcels",
-    layers:[{
-      "layerindex":0,
-      "layerlabel":"Parcels",
+      var id = [{
+      "layerIndex":0,
       fields:[{
           "id":0,
           "name":"pinnum",
@@ -335,31 +293,11 @@
           "name":"deedurl",
           "style":"url", 
           "label":"Deed"
-        }],
-      },
-      {
-      "layerindex":1,
-      "layerlabel":"Zoning",
-      fields:[{
-        "id":0,
-        "name":"districts",
-        "style":"key", //key,text,url,num
-        "label":"Zonning District"
-      },
-      {
-        "id":1,
-        "name":"Acreage",
-        "style":"text", //key,text,url,num
-        "label":"Acreage"
       }],
-    }],
-  };
+    }];
 
-    //QuickMap.setIdentifyConfig(id);
+    //QuickMap.setIdentifyCofnig(id);
 
-    function onMapClick(e) {
-      QuickMap.getStateplane(e);
-    }
     function DoTheCheck() {
       if (document.checkform.getfeatureinfo.checked == true)
         {map.addEventListener('click', onMapClick);}
