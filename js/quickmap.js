@@ -16,6 +16,7 @@ var QuickMap = {
   title:"Quick Map",
   identifyConfig:{
     "service":"bc_parcels",
+    "tolerance":3,
     layers:[{
       "layerindex":0,
       "layerlabel":"Parcels",
@@ -121,6 +122,8 @@ var QuickMap = {
            crossDomain: true,
            success:function(data){
 
+
+
             selectBox += '<div class="btn-group">'
             selectBox += '<button type="button" class="btn  btn-primary dropdown-toggle btn-dd-title" data-toggle="dropdown">'
             selectBox +=  QuickMap.dataMapConfig.Label +' <span class="caret"></span>'
@@ -140,15 +143,28 @@ var QuickMap = {
                 if(QuickMap.dataMapConfig.fields[f].type=='display'){
                   for(var v=0;v<QuickMap.dataMapConfig.fields[f].values.length;v++){
                     if(QuickMap.dataMapConfig.fields[f].values[v].value==data.features[dataIdx].attributes[QuickMap.dataMapConfig.fields[f].fieldName]){
-                      selectBox += '    <li class="dd-primary" ><button class="btn btn-primary bnt-dd" value=\''+ value  + '\' '+ ' onclick="QuickMap.zoomMap(this.value,16,false)" >'+label+'</button></li>'
+                      var  displaytxt = ''
+                      
+                      //if(dataIdx != 0){displaytxt = 'display:none'}else{displaytxt = ''}
+                      //if(dataIdx % 5 == 0 && dataIdx != 0 ){
+                      //  selectBox += '<li class="dd-primary" id="datadrivenlist'+dataIdx % 5+'" style="'+displaytxt+'" ><button class="btn btn-primary bnt-dd"><span class="glyphicon glyphicon-arrow-up"></span></button><li>';
+                      //}
+
+                      //if(dataIdx > 4 ){displaytxt = 'display:none'}else{displaytxt = ''}
+                      selectBox += '<li class="dd-primary" id="datadrivenlist'+dataIdx % 5+'" style="'+displaytxt+'"  ><button class="btn btn-primary bnt-dd" value=\''+ value  + '\' '+ ' onclick="QuickMap.zoomMap(this.value,16,false)" >'+label+'</button></li>'
+
+                      //if(dataIdx == 4 ){displaytxt = ''}else{displaytxt = 'display:none'}
+                      //if(dataIdx % 5 == 4 && dataIdx < data.features.length-1){
+                      //  selectBox += '<li class="dd-primary" id="datadrivenlist'+dataIdx % 5+'"  style="'+displaytxt+'"  ><button class="btn btn-primary bnt-dd"><span class="glyphicon glyphicon-arrow-down"></span></button><li>'
+                      //}
                     }
 
                   }
                 }
-
               }
             }
-
+            
+            
             selectBox += '  </ul>'
             selectBox += '</div>'
 
@@ -326,7 +342,7 @@ var QuickMap = {
    
     identifyService=QuickMap.getIdentifyService();
     urlStr = 'http://'+QuickMap.agsServerGeocode+'/'+QuickMap.agsServerInstanceNameGeocode+'/rest/services/OpenDataAsheville/'+identifyService+'/MapServer/identify';
-    data={f:"json",sr:QuickMap.mySRID,layers:lyrs,geometry:aPt,imageDisplay:"800,600,96",tolerance:3,mapExtent:bbox,geometryType:"esriGeometryPoint",returnGeometry:false};
+    data={f:"json",sr:QuickMap.mySRID,layers:lyrs,geometry:aPt,imageDisplay:"800,600,96",tolerance:QuickMap.identifyConfig.tolerance,mapExtent:bbox,geometryType:"esriGeometryPoint",returnGeometry:false};
 
        $.ajax({
         url: urlStr,
