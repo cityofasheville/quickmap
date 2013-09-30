@@ -141,16 +141,13 @@ var QuickMap = {
                 if(QuickMap.dataMapConfig.fields[f].type=='display'){
                   for(var v=0;v<QuickMap.dataMapConfig.fields[f].values.length;v++){
                     if(QuickMap.dataMapConfig.fields[f].values[v].value==data.features[dataIdx].attributes[QuickMap.dataMapConfig.fields[f].fieldName]){
-
-                      selectBox += '    <li class="dd-primary" ><button class="btn btn-primary bnt-dd" value=\''+ value  + '\' '+ ' onclick="QuickMap.zoomMap(this.value,16,false)" >'
-                      //if(dataIdx > 0){
-                      //  selectBox += '   <span class="glyphicon glyphicon-arrow-up"></span>&nbsp;&nbsp;';
-                      //}
-                      selectBox += label        
-                      //if(dataIdx < parseInt(data.features.length)-1){
-                      //  selectBox += '&nbsp;&nbsp;<span class="glyphicon glyphicon-arrow-down"></span>'
-                      //}
-                      selectBox += '</button></li>'
+                      if(dataIdx % 6 == 0 && dataIdx != 0 ){
+                        selectBox += '<li class="dd-primary" id="datadrivenlist'+dataIdx % 6+'" ><button class="btn btn-primary bnt-dd"><span class="glyphicon glyphicon-arrow-up"></span></button><li>';
+                      }
+                      selectBox += '    <li class="dd-primary" id="datadrivenlist'+dataIdx % 6+'" ><button class="btn btn-primary bnt-dd" value=\''+ value  + '\' '+ ' onclick="QuickMap.zoomMap(this.value,16,false)" >'+label+'</button></li>'
+                      if(dataIdx % 6 == 5 && dataIdx < data.features.length-1){
+                        selectBox += '<li class="dd-primary" id="datadrivenlist'+dataIdx % 6+'" ><button class="btn btn-primary bnt-dd"><span class="glyphicon glyphicon-arrow-up"></span></button><li>'
+                      }
                     }
 
                   }
