@@ -55,6 +55,7 @@ var QuickMap = {
     "agsServerFolderName":"OpenDataAsheville",
     "agsServicename":"coa_water_rescue_points",
     "agsLayerIndex":0,
+    "Label":"Water Resuce Point's",
     "fields":[{
       "fieldName":"label",
       "fieldLabel":"Water Resuce Point",
@@ -118,57 +119,41 @@ var QuickMap = {
           dataType: "jsonp",
           data: data,
            crossDomain: true,
-           success:function(data){ 
-            
-            if (screen.width <= 780) {
+           success:function(data){
 
-              selectBox += '<select id="mapsearch" class="form-control input-sm text-info"  onchange="QuickMap.zoomMap(this.value,16,false)" >';
-            }
+            selectBox += '<div class="btn-group">'
+            selectBox += '<button type="button" class="btn  btn-primary dropdown-toggle btn-dd-title" data-toggle="dropdown">'
+            selectBox +=  QuickMap.dataMapConfig.Label +' <span class="caret"></span>'
+            selectBox += '</button>'
+            selectBox += '<ul class="dropdown-menu dd-drp" role="menu">'
 
             for(var dataIdx=0;dataIdx<data.features.length;dataIdx++ ){
-              
-               xStr=data.features[dataIdx].geometry.x;
-               yStr=data.features[dataIdx].geometry.y;
-               geom={geometries: [{x:xStr,y:yStr}]};
-               value=JSON.stringify(geom);
-               
-               
-               
-               var label='';
-               
-
-                if (screen.width <= 780) {
-                  selectBox +=  '<option value=\''+ value  + '\' class="input-sm text-info" >'+ label+ '</option>';
-                }else{
-                  for (var f=0;f<QuickMap.dataMapConfig.fields.length;f++){
-
-                    if(QuickMap.dataMapConfig.fields[f].type=='key'){
-                      label=data.features[dataIdx].attributes[QuickMap.dataMapConfig.fields[f].fieldName];
-                      len=label.length;
-           
-
+              xStr=data.features[dataIdx].geometry.x;
+              yStr=data.features[dataIdx].geometry.y;
+              geom={geometries: [{x:xStr,y:yStr}]};
+              value=JSON.stringify(geom);
+              for (var f=0;f<QuickMap.dataMapConfig.fields.length;f++){
+                if(QuickMap.dataMapConfig.fields[f].type=='key'){
+                  label=data.features[dataIdx].attributes[QuickMap.dataMapConfig.fields[f].fieldName];
+                  len=label.length;
+                }
+                if(QuickMap.dataMapConfig.fields[f].type=='display'){
+                  for(var v=0;v<QuickMap.dataMapConfig.fields[f].values.length;v++){
+                    if(QuickMap.dataMapConfig.fields[f].values[v].value==data.features[dataIdx].attributes[QuickMap.dataMapConfig.fields[f].fieldName]){
+                      selectBox += '    <li class="dd-primary" ><button class="btn btn-primary bnt-dd" value=\''+ value  + '\' '+ ' onclick="QuickMap.zoomMap(this.value,16,false)" >'+label+'</button></li>'
                     }
-                    if(QuickMap.dataMapConfig.fields[f].type=='display'){
-                      for(var v=0;v<QuickMap.dataMapConfig.fields[f].values.length;v++){
-                        if(QuickMap.dataMapConfig.fields[f].values[v].value==data.features[dataIdx].attributes[QuickMap.dataMapConfig.fields[f].fieldName]){
-                          label+='&nbsp;-&nbsp;'+data.features[dataIdx].attributes[QuickMap.dataMapConfig.fields[f].fieldName]                        
-                          selectBox += '<div><button  class="btn btn-default btn-xs zmlayer" style="font-weight:bold;background-color:'+QuickMap.dataMapConfig.fields[f].values[v].background+';" value=\''+ value  + '\' '+
-                          ' onclick="QuickMap.zoomMap(this.value,16,false)" >'+label+'</button><div>';
-                        }
-                      }
-                    }
+
                   }
-               }
-            }
-            
+                }
 
-            if (screen.width <= 780) {
-                 selectBox += '</select>';
-            }else{
-              selectBox += '</div>';
+              }
             }
 
-             $('#results').append(selectBox);
+            selectBox += '  </ul>'
+            selectBox += '</div>'
+
+            $('#results').append(selectBox);
+
            },
            error:function(x,t,m){console.log('fail');}
        });
@@ -222,16 +207,23 @@ var QuickMap = {
        for(var i=0;i<jsonLayerObj.length;i++){
         popupContentText += '<div ><h4>'+jsonLayerObj[i].layername+'</h4></div>'
         reccnt=0;
+
         for(var f=0;f<jsonLayerObj[i].features.length;f++){
-          for(var a=0;a<jsonLayerObj[i].features[f].attributes.length;a++){            
+          
+
+          for(var a=0;a<jsonLayerObj[i].features[f].attributes.length;a++){     
+          
             name=jsonLayerObj[i].features[f].attributes[a].fieldname;
             val=jsonLayerObj[i].features[f].attributes[a].fieldvalue;
-            style=jsonLayerObj[i].features[f].attributes[a].fieldstyle;
+            style=jsonLayerObj[i].features[f].attributes[a].fieldstyle; 
+            
             if(val){              
               if(a==0){
+
                     reccnt+=1;
                     popupContentText += '<div class="media"><a class="pull-left" href="#"><button type="button" class="btn  btn-info">'+reccnt+'</button></a><div class="media-body">'
-              }             
+              }   
+
               switch(style){
                 case'key':
                   popupContentText += '<span><b>'+name+':&nbsp</b></span>'

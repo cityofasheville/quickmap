@@ -44,22 +44,10 @@
       }
       #map{
         float: right;
-        height: 90%;
-        width:  90%;
+        height: 93%;
+        width:  100%;
       }
-      .sidepanel{
-        float:left;
-        width:10%;
-        height: 90%;
-        background-color: #ffffff;
-        border-color: #ffffff;
-        color: #333333;
-        border-radius: 0px 0px 0px 0px;
-        overflow: scroll;
-      }
-      .bigtest {
-        height: 10%;
-      }
+
       .fl{float:right;}
       .ui-autocomplete { position: absolute; cursor: default;z-index:9999 !important;}
 
@@ -83,20 +71,35 @@
       .panel-maptitle{
         background-color: #428BCA;
         color:#ffffff;
+        height:7%;
+      }
+      .btn-dd-title{
+        font-size:18px;
+        font-weight: bold;
+      }
+      .dd-primary{
+        background-color: #428BCA;
+        color:#ffffff;
+      }
+      .bnt-dd{
+        border:0px;
+        width: 100%;
+      }
+      .dd-drp{
+        background-color: #428BCA;
+        width:100%;
+        height: 500px;
+        overflow: scroll;
       }
       @media screen and (max-width: 780px){
-        .sidepanel{
-          width: 100%;
-          height:5%;
-          float:none;
-          background-color: #428BCA;
-          color:#ffffff;
-          overflow: hidden;
+        .panel-maptitle{
+          height:10%;
         }
         #map{
-          float:none;
-          width:100%;
-          height:85% 
+          height:90% 
+        }
+        .dd-drp{
+          height: 200px;
         }
       }
 
@@ -118,11 +121,12 @@
 
   <body data-twttr-rendered="true" background-color="#F0F0F0">  
     <div class="panel panel-maptitle">
-      <div  class="panel panel-heading panel-maptitle" >
-        <center><h2>Water Rescue Point's</h2></center>
+      <div  class="panel panel-maptitle" >
+        <center><span id="results"></span></center>
+
       </div>
     </div>
-    <div id="results" class="sidepanel"></div>
+    
     <div id="map"></div>
 
 </div> 
@@ -228,6 +232,7 @@
         });
 
 
+      map.addEventListener('click', onMapClick);
 
       var baseLayers = {
         "Street Map": basemapsld,
@@ -244,60 +249,64 @@
         if(window.console) window.console.log('exitFullscreen');
       });
     
-    
-      var id = [{
-      "layerIndex":0,
+   QuickMap.identifyConfig={
+    "service":"coa_water_rescue_points",
+    layers:[{
+      "layerindex":0,
+      "layerlabel":"Water Rescue Point",
       fields:[{
           "id":0,
-          "name":"pinnum",
+          "name":"Label",
           "style":"key", 
-          "label":"PIN"
+          "label":"Name"
         },
         {
           "id":1,
-          "name":"owner",
-          "style":"text", 
-          "label":"Owner"
+          "name":"Elevation",
+          "style":"number", 
+          "label":"Elevation"
         },
         {
           "id":2,
-          "name":"acreage",
+          "name":"Address",
           "style":"text", 
-          "label":"Acreage"
+          "label":"Address"
         },
         {
           "id":3,
-          "name":"taxvalue",
-          "style":"currency", 
-          "label":"Tax Value"
-        },        
+          "name":"River_Side",
+          "style":"text", 
+          "label":"River Side"
+        },
         {
           "id":4,
-          "name":"buildingvalue",
+          "name":"access_cond",
           "style":"currency", 
-          "label":"Building Value"
-        },        
+          "label":"Access Condition"
+        },
         {
           "id":5,
-          "name":"propcard",
-          "style":"url", 
-          "label":"Property Card"
+          "name":"Type_Access",
+          "style":"text", 
+          "label":"Access From"
         },
         {
-          "id":6,
-          "name":"platurl",
-          "style":"url", 
-          "label":"Plat"
+          "id":5,
+          "name":"Sign",
+          "style":"text", 
+          "label":"Sign"
         },
         {
-          "id":7,
-          "name":"deedurl",
-          "style":"url", 
-          "label":"Deed"
+          "id":5,
+          "name":"Access_Cond",
+          "style":"text", 
+          "label":"Access Condition"
+        }],
       }],
-    }];
-
-    //QuickMap.setIdentifyCofnig(id);
+  };
+    function onMapClick(e) {
+      QuickMap.getStateplane(e);
+    }
 
     function DoTheCheck() {
       if (document.checkform.getfeatureinfo.checked == true)
