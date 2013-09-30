@@ -16,6 +16,7 @@ var QuickMap = {
   title:"Quick Map",
   identifyConfig:{
     "service":"bc_parcels",
+    "tolerance":3,
     layers:[{
       "layerindex":0,
       "layerlabel":"Parcels",
@@ -335,7 +336,7 @@ var QuickMap = {
    
     identifyService=QuickMap.getIdentifyService();
     urlStr = 'http://'+QuickMap.agsServerGeocode+'/'+QuickMap.agsServerInstanceNameGeocode+'/rest/services/OpenDataAsheville/'+identifyService+'/MapServer/identify';
-    data={f:"json",sr:QuickMap.mySRID,layers:lyrs,geometry:aPt,imageDisplay:"800,600,96",tolerance:3,mapExtent:bbox,geometryType:"esriGeometryPoint",returnGeometry:false};
+    data={f:"json",sr:QuickMap.mySRID,layers:lyrs,geometry:aPt,imageDisplay:"800,600,96",tolerance:QuickMap.identifyConfig.tolerance,mapExtent:bbox,geometryType:"esriGeometryPoint",returnGeometry:false};
 
        $.ajax({
         url: urlStr,
