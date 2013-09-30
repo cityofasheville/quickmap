@@ -154,56 +154,6 @@ var QuickMap = {
 
             $('#results').append(selectBox);
 
-
-            // if (screen.width <= 780) {
-
-            //   selectBox += '<select id="mapsearch" class="form-control input-sm text-info"  onchange="QuickMap.zoomMap(this.value,16,false)" >';
-            // }
-
-            // for(var dataIdx=0;dataIdx<data.features.length;dataIdx++ ){
-              
-            //    xStr=data.features[dataIdx].geometry.x;
-            //    yStr=data.features[dataIdx].geometry.y;
-            //    geom={geometries: [{x:xStr,y:yStr}]};
-            //    value=JSON.stringify(geom);
-               
-               
-               
-            //    var label='';
-               
-
-            //     if (screen.width <= 780) {
-            //       selectBox +=  '<option value=\''+ value  + '\' class="input-sm text-info" >'+ label+ '</option>';
-            //     }else{
-            //       for (var f=0;f<QuickMap.dataMapConfig.fields.length;f++){
-
-            //         if(QuickMap.dataMapConfig.fields[f].type=='key'){
-            //           label=data.features[dataIdx].attributes[QuickMap.dataMapConfig.fields[f].fieldName];
-            //           len=label.length;
-           
-
-            //         }
-            //         if(QuickMap.dataMapConfig.fields[f].type=='display'){
-            //           for(var v=0;v<QuickMap.dataMapConfig.fields[f].values.length;v++){
-            //             if(QuickMap.dataMapConfig.fields[f].values[v].value==data.features[dataIdx].attributes[QuickMap.dataMapConfig.fields[f].fieldName]){
-            //               label+='&nbsp;-&nbsp;'+data.features[dataIdx].attributes[QuickMap.dataMapConfig.fields[f].fieldName]                        
-            //               selectBox += '<div><button  class="btn btn-default btn-xs zmlayer" style="font-weight:bold;background-color:'+QuickMap.dataMapConfig.fields[f].values[v].background+';" value=\''+ value  + '\' '+
-            //               ' onclick="QuickMap.zoomMap(this.value,16,false)" >'+label+'</button><div>';
-            //             }
-            //           }
-            //         }
-            //       }
-            //    }
-            // }
-            
-
-            // if (screen.width <= 780) {
-            //      selectBox += '</select>';
-            // }else{
-            //   selectBox += '</div>';
-            // }
-
-            //  $('#results').append(selectBox);
            },
            error:function(x,t,m){console.log('fail');}
        });
@@ -262,11 +212,11 @@ var QuickMap = {
           
 
           for(var a=0;a<jsonLayerObj[i].features[f].attributes.length;a++){     
-            alert(jsonLayerObj[i].features[f].attributes[a].fieldvalue)
+          
             name=jsonLayerObj[i].features[f].attributes[a].fieldname;
             val=jsonLayerObj[i].features[f].attributes[a].fieldvalue;
-            style=jsonLayerObj[i].features[f].attributes[a].fieldstyle;
-
+            style=jsonLayerObj[i].features[f].attributes[a].fieldstyle; 
+            
             if(val){              
               if(a==0){
 

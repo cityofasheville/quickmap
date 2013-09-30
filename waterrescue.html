@@ -44,22 +44,10 @@
       }
       #map{
         float: right;
-        height: 95%;
+        height: 93%;
         width:  100%;
       }
-      .sidepanel{
-        float:left;
-        width:10%;
-        height: 90%;
-        background-color: #ffffff;
-        border-color: #ffffff;
-        color: #333333;
-        border-radius: 0px 0px 0px 0px;
-        overflow: scroll;
-      }
-      .bigtest {
-        height: 10%;
-      }
+
       .fl{float:right;}
       .ui-autocomplete { position: absolute; cursor: default;z-index:9999 !important;}
 
@@ -83,7 +71,7 @@
       .panel-maptitle{
         background-color: #428BCA;
         color:#ffffff;
-        height:5%;
+        height:7%;
       }
       .btn-dd-title{
         font-size:18px;
@@ -268,39 +256,51 @@
       "layerlabel":"Water Rescue Point",
       fields:[{
           "id":0,
-          "name":"label",
+          "name":"Label",
           "style":"key", 
           "label":"Name"
         },
         {
           "id":1,
-          "name":"elevation",
+          "name":"Elevation",
           "style":"number", 
           "label":"Elevation"
         },
         {
           "id":2,
-          "name":"address",
+          "name":"Address",
           "style":"text", 
           "label":"Address"
         },
         {
           "id":3,
-          "name":"river_side",
+          "name":"River_Side",
           "style":"text", 
           "label":"River Side"
-        },        
+        },
         {
           "id":4,
           "name":"access_cond",
           "style":"currency", 
           "label":"Access Condition"
-        },        
+        },
         {
           "id":5,
-          "name":"sign",
+          "name":"Type_Access",
           "style":"text", 
-          "label":"Sign?"
+          "label":"Access From"
+        },
+        {
+          "id":5,
+          "name":"Sign",
+          "style":"text", 
+          "label":"Sign"
+        },
+        {
+          "id":5,
+          "name":"Access_Cond",
+          "style":"text", 
+          "label":"Access Condition"
         }],
       }],
   };
