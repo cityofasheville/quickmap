@@ -207,6 +207,23 @@
             attribution:mapAttr,
         });
 
+
+        var img2010 = L.tileLayer.wms("http://services.nconemap.com/arcgis/services/Imagery/Orthoimagery_Latest/ImageServer/WMSServer?", {
+            layers: 'Orthoimagery_Latest',
+            format: 'image/png',
+            transparent: true,
+            attribution: "Imagery from - North Carolina Center for Geographic Information and Analysis"
+        })
+
+      var bmimg = L.layerGroup([img2010])
+
+      var baseLayers = {
+        "Street Map": basemapsld,
+        "Imagery":img2010,
+      };
+
+
+
        var wr= L.tileLayer(
           'http://gis.ashevillenc.gov/tiles/waterrescue/{z}/{x}/{y}.png', 
           {
@@ -215,6 +232,11 @@
             tms: true,
             attribution:mapAttr,
         });
+
+      var overlayLayers = {
+        "Water Rescue Points": wr,
+      }
+
 
        var map = new L.Map(
         'map', 
@@ -237,10 +259,16 @@
 
       var baseLayers = {
         "Street Map": basemapsld,
+        "Imagery": img2010,
       };
 
       QuickMap.dataDriveMap=true;
       QuickMap.getlist();
+
+      layersControl = new L.control.layers(baseLayers,overlayLayers,{collapsed: false});
+
+      layersControl.addTo(map);
+      layersControl._update(); 
 
       map.on('enterFullscreen', function(){
         if(window.console) window.console.log('enterFullscreen');
