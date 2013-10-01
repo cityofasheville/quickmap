@@ -473,9 +473,9 @@ a.leaflet-popup-close-button span {
        -moz-border-radius: 50%;
             border-radius: 50%;
     overflow: hidden;
-    -webkit-box-shadow: 0 0 0 2px #eee, -3px 3px 0 2px rgba(85, 85, 85, 0.5);
-       -moz-box-shadow: 0 0 0 2px #eee, -3px 3px 0 2px rgba(85, 85, 85, 0.5);
-            box-shadow: 0 0 0 2px #eee, -3px 3px 0 2px rgba(85, 85, 85, 0.5);
+    -webkit-box-shadow: 0 3px 14px rgba(0,0,0,0.4);
+       -moz-box-shadow: 0 3px 14px rgba(0,0,0,0.4);
+            box-shadow: 0 3px 14px rgba(0,0,0,0.4);
   }
   a.leaflet-popup-close-button:before,
   a.leaflet-popup-close-button:after {
