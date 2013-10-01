@@ -1,0 +1,50 @@
+      #map,body,html { 
+        height: 100%;
+        width:  100%;
+      }
+      #resultsholder{
+      }
+      .mapdiv {
+        height: 80%;
+        width: 100%;
+      }
+      .bigtest {
+        height: 100%;
+      }
+      .fl{float:right;}
+      .ui-autocomplete { position: absolute; cursor: default;z-index:9999 !important;}
+
+      .record_list.deactive {
+        display:none;
+      }
+      .layer_list.deactive {
+        display:none;
+      }
+      .field_list.deactive {
+        display:none;
+      }
+      .layerrec_list.deactive {
+        display:none;
+      }
+
+      .att-divider {
+          background-color: #428bca;
+          height: 1px;
+          overflow: hidden;
+          width: 80%;
+
+      }
+
+      .badge-info {
+        color: #ffffff;
+        background-color: #428bca;
+        border-color: #357ebd;
+      }
+
+
+
+    .leaflet-control-zoom-fullscreen { background-image: url(img/icon-fullscreen.png);z-index:99999 }
+    /* on selector per rule as explained here : http://www.sitepoint.com/html5-full-screen-api/ */
+    #map:-webkit-full-screen { width: 100% !important; height: 100% !important; }
+    #map:-moz-full-screen { width: 100% !important; height: 100% !important; }
+    #map:full-screen { width: 100% !important; height: 100% !important; }
