@@ -197,6 +197,8 @@
       if (document.checkform.getfeatureinfo.checked == false)
         {map.removeEventListener('click', onMapClick); map.closePopup(popup);}
     }
+
+
 var legend = L.control({position: 'bottomright'});
 
 function getColor(d) {

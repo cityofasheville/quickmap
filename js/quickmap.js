@@ -168,7 +168,22 @@ var QuickMap = {
             selectBox += '  </ul>'
             selectBox += '</div>'
 
-            $('#results').append(selectBox);
+          // var selector = L.control({position: 'bottomleft'})
+          
+          // selector.onAdd = function (){
+          //   var div = L.DomUtil.create('div', 'info legend')
+          //   L.DomEvent.addListener(div, 'click', function (e) {L.DomEvent.stopPropagation(e);});
+          //   L.DomEvent.addListener(div, 'mousedown', function (e) {L.DomEvent.stopPropagation(e);});
+          //   L.DomEvent.addListener(div, 'touchstart', function (e) {L.DomEvent.stopPropagation(e);});
+          //   L.DomEvent.addListener(div, 'doubleclick', function (e) {L.DomEvent.stopPropagation(e);});
+          //   L.DomEvent.addListener(div, 'mousewheel', function (e) {L.DomEvent.stopPropagation(e);});
+            
+          //   div.innerHTML += selectBox
+          //   return div
+          // }
+          // selector.addTo(map);
+
+          $('#results').append(selectBox);
 
            },
            error:function(x,t,m){console.log('fail');}
