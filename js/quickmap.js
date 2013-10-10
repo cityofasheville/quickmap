@@ -56,7 +56,7 @@ var QuickMap = {
     "agsServerFolderName":"OpenDataAsheville",
     "agsServicename":"coa_water_rescue_points",
     "agsLayerIndex":0,
-    "Label":"Water Resuce Point's",
+    "Label":"Water Resuce Points",
     "fields":[{
       "fieldName":"label",
       "fieldLabel":"Water Resuce Point",
